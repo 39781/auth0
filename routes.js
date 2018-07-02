@@ -23,7 +23,7 @@ router.post('/validateUser',function(req, res){
 
 router.get('/redirectUri',function(req,res){
 	//console.log(req.params, req.query, req.url, req);
-	res.redirect('redirect.html?empid='+req.query.empId);	
+	res.redirect('https://logintests.herokuapp.com/redirect.html?empid='+req.query.empId);	
 });
 
 router.post('/accessToken',function(req, res){
@@ -31,6 +31,8 @@ router.post('/accessToken',function(req, res){
 	var params = url.parse(req.body.url, true).query;	
 	console.log(params);
 	res.status(200);
+	console.log('<script language="javascript">parentwin = window.self;parentwin.opener = window.self;parentwin.close();</script>');
+	res.send('<script language="javascript">function closeWin(){parentwin = window.self;parentwin.opener = window.self;parentwin.close();}closeWin();</script>');
 	res.end();
 })
 
