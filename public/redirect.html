@@ -125,27 +125,15 @@ span.psw {
     }
 }
 </style>
-</head>
-<body>
-<div id="id01" class="modal" style="display:block">
-  
-  <form class="modal-content animate">
-  <div class="container">
-		<div id="containerBody">
-		<span> User validation success now please continue button to continue with google assistant</span>
-		<span id="status"></span>
-		</div>      
-    </div>      
-  </form>
-</div>
 <script>
+function closeMe(){
 var url= window.location.href.replace('#access_token','&access_token');
 console.log({'url':url});
 var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() 
 	{if (this.readyState == 4){
 			if(this.status == 200) {
-				document.getElementById('status').innerHTML = '<button onclick="window.close()">Continue</button>'
+				document.getElementById("close").click();
 			}else if(this.status == 400){
 				console.log('status : 400');
 			}
@@ -154,6 +142,25 @@ var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
 	xmlhttp.setRequestHeader("Content-Type", "application/json");
 	xmlhttp.send(JSON.stringify({'url':url}));
+}
 </script>
+</head>
+<body>
+<div id="id01" class="modal" style="display:block">
+  
+  <form class="modal-content animate">
+  <div class="imgcontainer">
+      <span  onclick="window.close()" class="close" id='close' title="Close Modal">&times;</span>
+      <img src="./images/Hema.png" alt="Avatar" class="avatar">
+    </div>
+  <div class="container">
+		<div id="containerBody">
+		<span> User validation success now please continue button to continue with google assistant</span>
+		<button onclick='closeMe()'>Continue</button>
+		</div>      
+    </div>      
+  </form>
+</div>
+
 </body>
 </html>
