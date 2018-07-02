@@ -177,7 +177,7 @@ function validateLogin() {
 				domain:       accDet.domainName,
 				clientID:     accDet.clientID,
 				responseType: 'token',
-				//redirectUri: accDet.redirectUri+'?empId='+document.getElementById("uname").value,
+				redirectUri: accDet.redirectUri+'?empId='+document.getElementById("uname").value,
 				responseType: 'token id_token'
 			  }); 
 			  var respText = '<label for="psw"><b>Enter OTP</b></label><input type="password" placeholder="Password" id="otp" name="otp" required><button type="button" onClick="validateOtp('+accDet.phoneNumber+')">Login</button>';
@@ -218,7 +218,6 @@ function validateOtp(phone) {
 		}else{
 			alert('hari');
 			console.log(res);
-			alert('hari');
 			document.getElementById("close").click();
 		}
     }
