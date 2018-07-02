@@ -130,7 +130,12 @@ span.psw {
 <div id="id01" class="modal" style="display:block">
   
   <form class="modal-content animate">
-      <span onclick="window.close()" class="close" id='close' title="Close Modal">&times;</span>      
+  <div class="container">
+		<div id="containerBody">
+		<span> User validation success now please continue button to continue with google assistant</span>
+		<span id="status"></span>
+		</div>      
+    </div>      
   </form>
 </div>
 <script>
@@ -140,7 +145,7 @@ var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() 
 	{if (this.readyState == 4){
 			if(this.status == 200) {
-				document.getElementById('close').click();
+				document.getElementById('status').innerHTML = '<button onclick="window.close()">Continue</button>'
 			}else if(this.status == 400){
 				console.log('status : 400');
 			}
