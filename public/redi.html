@@ -1,28 +1,25 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-</head>
-<body>
-<div id='close' onClick='window.close();'></div>
 <script>
-var params= window.location.href.split('#access_token')[1];
 var url= window.location.href;
 console.log({'url':url});
 var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() 
 	{if (this.readyState == 4){
 			if(this.status == 200) {
-				document.getElementById('close').click();
+				window.close();
 			}else if(this.status == 400){
 				console.log('status : 400');
 			}
 	}
 	}
-	xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
-	//xmlhttp.open("POST", "http://localhost:3000/accessToken");
+	xmlhttp.open("POST", "http://localhost:3000/accessToken");
 	xmlhttp.setRequestHeader("Content-Type", "application/json");
 	xmlhttp.send(JSON.stringify({'url':url}));
 </script>
+</head>
+<body>
+
 </body>
 </html>
