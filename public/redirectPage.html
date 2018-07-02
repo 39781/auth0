@@ -144,27 +144,30 @@ span.psw {
     <div class="container">
 		<div id="containerBody">
 		  <span> User validated Sucessfully. press continue to close window</span>
-		  <button onClick="window.close()">Continue</button>
+		  <button onClick="return continue()">Continue</button>
 	  </div>      
   </form>
 </div>
 <script>
-var url= window.location.href;
-console.log({'url':url});
-var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function() 
-	{if (this.readyState == 4){
-			if(this.status == 200) {
-				document.getElementById('close').click();
-			}else if(this.status == 400){
-				console.log('status : 400');
-			}
-	}
-	}
-	xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
-	//xmlhttp.open("POST", "http://localhost:3000/accessToken");
-	xmlhttp.setRequestHeader("Content-Type", "application/json");
-	xmlhttp.send(JSON.stringify({'url':url}));
+function continue(){
+	var url= window.location.href;
+	console.log({'url':url});
+	var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() 
+		{if (this.readyState == 4){
+				if(this.status == 200) {
+					document.getElementById('close').click();
+					return false;
+				}else if(this.status == 400){
+					console.log('status : 400');
+				}
+		}
+		}
+		xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
+		//xmlhttp.open("POST", "http://localhost:3000/accessToken");
+		xmlhttp.setRequestHeader("Content-Type", "application/json");
+		xmlhttp.send(JSON.stringify({'url':url}));
+}
 </script>
 </body>
 </html>
