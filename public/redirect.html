@@ -1,6 +1,11 @@
 <html>
 
-<body><span onclick="window.close()" class="close" id='close' title="Close Modal">&times;</span></body>
+<div id="id01" class="modal" style="display:block">
+  
+  <form class="modal-content animate">
+      <span onclick="window.close()" class="close" id='close' title="Close Modal">&times;</span>      
+  </form>
+</div>
 <script>
 var url= window.location.href.replace('#access_token','&access_token');
 console.log({'url':url});
