@@ -8,6 +8,7 @@ var url 			= require('url');
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
 const {OrderUpdate} = require('actions-on-google');
+const autoClose 	= require('browser-sync-close-hook');
 
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
@@ -51,6 +52,23 @@ router.post('/accessToken',function(req, res){
 	console.log(req.body.url);
 	var params = url.parse(req.body.url, true).query;	
 	console.log(params);	
+	gulp.task('serve', ['watch'], () => {
+	  browserSync.use({
+		plugin() {},
+		hooks: {
+		  'client:js': autoClose, // <-- important part
+		},
+	  });
+	 
+	  browserSync({
+		ui: false,
+		notify: false,
+		server: {
+		  baseDir: './public',
+		  middleware: [historyApiFallback()],
+		},
+	  });
+	});
 	//sendNotification('ABwppHHUz6ouuMtf5SSaIFaSffwkOVPPO4_FV_146Yz5wyGfCE03jubmYfdUMbXThrZpjvHDClxvd0U');
 	res.status(200);
 	res.json(params).end();
@@ -81,8 +99,7 @@ function sendNotification(userId, oid){
 		  intent: 'loginSuccess',
 		},
 	  };
-	  
-	  
+	  	  
 
 	  request.post('https://actions.googleapis.com/v2/conversations:send', {
 		'auth': {
