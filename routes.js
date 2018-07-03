@@ -44,8 +44,7 @@ router.post('/validateUser',function(req, res){
 
 router.get('/redirectUri',function(req,res){
 	//console.log(req.params, req.query, req.url, req);
-	res.end();
-	//res.redirect('https://logintests.herokuapp.com/redirect.html?empid='+req.query.empId);	
+	res.redirect('https://logintests.herokuapp.com/redirect.html?empid='+req.query.empId);	
 });
 
 router.post('/accessToken',function(req, res){
