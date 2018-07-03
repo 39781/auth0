@@ -1,20 +1,6 @@
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-  <script type="text/javascript">
-    function closepage() {
-      var win = window.open('', '_self');
-      win.close();
-    }
-  </script>
-</head>
+<html>
 <body>
-    <form id="form1" runat="server">
-    <div>
-     <input type="button" runat="server" onclick="closepage();" value="Close Page 2" />
-    </div>
-    </form>
+
+<a href="#" onclick="javascript:var win = window.open('', '_self');win.close();return false;">Close</a>
 </body>
 </html>
