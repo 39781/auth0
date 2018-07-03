@@ -214,10 +214,9 @@ function validateOtp(phone) {
       verificationCode: document.getElementById('otp').value
     }, function (err,res) {
 		if(err){
+			document.getElementById('status').innerHTML = 'Invalid OTP, Please enter valid one';
 			console.log(err);
-		}else{
-			alert('hari');
-			console.log(res);
+		}else{						
 			document.getElementById("close").click();
 		}
     }
