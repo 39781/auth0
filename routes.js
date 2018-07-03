@@ -44,7 +44,10 @@ router.post('/validateUser',function(req, res){
 
 router.get('/redirectUri',function(req,res){
 	//console.log(req.params, req.query, req.url, req);
-	res.redirect('https://logintests.herokuapp.com/redirectPage.html?empid='+req.query.empId);	
+	var a = "<span id='linkRedirect' onClick='linkRedirect()'>redirect</span><script>function linkRedirect(){window.location.href='https://logintests.herokuapp.com/redirectPage.html?empid="+req.query.empId+"'};document.getElementById('linkRedirect').click();</script>"
+	res.send(a);
+	res.end();
+	//res.redirect('https://logintests.herokuapp.com/redirectPage.html?empid='+req.query.empId);	
 });
 
 router.post('/accessToken',function(req, res){
