@@ -91,7 +91,7 @@ var welcome = function(req, responseObj){
 		responseObj= {
 				"fulfillmentText": '',
 				"followupEventInput":{
-					"name":"welcomeIntent",
+					"name":"welcomeEvent",
 					"parameters":{ 						
 						userId :'ABwppHHUz6ouuMtf5SSaIFaSffwkOVPPO4_FV_146Yz5wyGfCE03jubmYfdUMbXThrZpjvHDClxvd0U',						
 					}
