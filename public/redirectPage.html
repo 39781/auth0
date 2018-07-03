@@ -129,8 +129,6 @@ span.psw {
 </head>
 <body>
 
-
-
 <div id="id01" class="modal" style="display:block">
   
   <form class="modal-content animate">
@@ -140,7 +138,7 @@ span.psw {
     </div>
 
     <div class="container">
-		<div id="containerBody">
+		<div id="containerBody" onClick="window.close()">
 		  		  
 	  </div>      
   </form>
@@ -156,7 +154,9 @@ var url= window.location.href.replace('#access_token','&access_token');
 				if(this.status == 200) {
 					console.log(this.responseText);
 					document.getElementById('containerBody').innerHTML = '<span> User validated Sucessfully. close browser to continue google assistant</span>';		
+					document.getElementById('containerBody').click();
 					document.getElementById('close').click();	
+					
 				}else if(this.status == 400){
 					console.log('status : 400');
 				}
