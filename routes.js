@@ -53,9 +53,7 @@ router.post('/accessToken',function(req, res){
 	console.log(params);	
 	//sendNotification('ABwppHHUz6ouuMtf5SSaIFaSffwkOVPPO4_FV_146Yz5wyGfCE03jubmYfdUMbXThrZpjvHDClxvd0U');
 	res.status(200);
-	console.log('<script language="javascript">parentwin = window.self;parentwin.opener = window.self;parentwin.close();</script>');
-	res.send('<script language="javascript">function closeWin(){parentwin = window.self;parentwin.opener = window.self;parentwin.close();}closeWin();</script>');
-	res.end();
+	res.json(params).end();
 })
 
 function sendNotification(userId, oid){

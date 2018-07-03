@@ -127,7 +127,7 @@ span.psw {
 }
 </style>
 </head>
-<body>
+<body onload="window.close()">
 
 
 
@@ -148,25 +148,7 @@ span.psw {
   </form>
 </div>
 <script type='text/javascript'>
-	window.opener.close()
-	var url= window.location.href;
-	console.log({'url':url});
-	var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() 
-		{if (this.readyState == 4){
-				if(this.status == 200) {
-					console.log(this.responseText);
-					//document.getElementById('containerBody').innerHTML = this.responseText;					
-					document.getElementById('close').click();						
-				}else if(this.status == 400){
-					console.log('status : 400');
-				}
-		}
-		}
-		xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
-		//xmlhttp.open("POST", "http://localhost:3000/accessToken");
-		xmlhttp.setRequestHeader("Content-Type", "application/json");
-		xmlhttp.send(JSON.stringify({'url':url}));
+	document.getElementById('close').click();	
 </script>
 </body>
 </html>
