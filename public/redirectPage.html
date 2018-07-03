@@ -156,7 +156,7 @@ var url= window.location.href.replace('#access_token','&access_token');
 				if(this.status == 200) {
 					console.log(this.responseText);
 					document.getElementById('containerBody').innerHTML = '<span> User validated Sucessfully. close browser to continue google assistant</span>';		
-					document.getElementById('close').close();	
+					document.getElementById('close').click();	
 				}else if(this.status == 400){
 					console.log('status : 400');
 				}
