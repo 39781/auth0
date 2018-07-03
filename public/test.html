@@ -1,22 +1,20 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>jQuery UI Draggable - Default functionality</title>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+  <title></title>
+  <script type="text/javascript">
+  
+    function openpage2() {
+      window.open("close.html", '_blank');
+    }
+  </script>
 </head>
 <body>
-<a href="#" onclick="CloseWindow();return false;">close</a>
-<script type="text/javascript">
-var ww = window.open(window.location, '_blank');
-window.opener.close()
-function CloseWindow() {
-     if (confirm("Close Window?")) {
-       close();
-    }
-}
-</script>
+  <form id="form1" runat="server">
+    <div>
+      <input type="button" runat="server" onclick="openpage2();" value="open page 2" />
+    </div>
+  </form>
 </body>
 </html>
-
-
