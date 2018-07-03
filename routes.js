@@ -7,6 +7,7 @@ var path			= require("path");
 var url 			= require('url');	
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
+const {OrderUpdate} = require('actions-on-google');
 
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
@@ -49,22 +50,32 @@ router.get('/redirectUri',function(req,res){
 router.post('/accessToken',function(req, res){
 	console.log(req.body.url);
 	var params = url.parse(req.body.url, true).query;	
-	console.log(params);
-	sendNotification('ABwppHHUz6ouuMtf5SSaIFaSffwkOVPPO4_FV_146Yz5wyGfCE03jubmYfdUMbXThrZpjvHDClxvd0U');
+	console.log(params);	
+	//sendNotification('ABwppHHUz6ouuMtf5SSaIFaSffwkOVPPO4_FV_146Yz5wyGfCE03jubmYfdUMbXThrZpjvHDClxvd0U');
 	res.status(200);
 	console.log('<script language="javascript">parentwin = window.self;parentwin.opener = window.self;parentwin.close();</script>');
 	res.send('<script language="javascript">function closeWin(){parentwin = window.self;parentwin.opener = window.self;parentwin.close();}closeWin();</script>');
 	res.end();
 })
 
-function sendNotification(userId){
+function sendNotification(userId, oid){
 	let jwtClient = new google.auth.JWT(
 	  key.client_email, null, key.private_key,
 	  ['https://www.googleapis.com/auth/actions.fulfillment.conversation'],
 	  null
 	);
+	
 	jwtClient.authorize((err, tokens) => {
 	  // code to retrieve target userId and intent
+	  const currentTime = new Date().toISOString();	  
+	  const orderUpdate = new OrderUpdate({
+		actionOrderId: oid,
+		orderState: {
+		  label: 'login success',
+		  state: 'FULFILLED',
+		},
+		updateTime: currentTime,
+	  });
 	  console.log(tokens);
 	  let notif = {   
 		target: {
@@ -72,13 +83,15 @@ function sendNotification(userId){
 		  intent: 'loginSuccess',
 		},
 	  };
+	  
+	  
 
 	  request.post('https://actions.googleapis.com/v2/conversations:send', {
 		'auth': {
 		  'bearer': tokens.access_token,
 		 },
 		'json': true,
-		'body': {'customPushMessage': notif},
+		'body': {'customPushMessage': orderUpdate},
 	  }, (err, httpResponse, body) => {
 		  console.log(err,body);
 		 console.log(httpResponse.statusCode + ': ' + httpResponse.statusMessage);
@@ -100,6 +113,34 @@ var welcome = function(req, responseObj){
 			resolve(responseObj);		
 	});
 }
+
+/*var dialogflowAPI = function(input, sessId){	
+	return new Promise(function(resolve, reject){
+		var options = { 
+			method: 'POST',
+			url: config.dialogflowAPI.replace('sessions',sessId),
+			headers: {
+				"Authorization": "Bearer " + config.accessToken
+			},
+			body:{			  
+			  queryInput: {
+				text: {
+				  text: input,
+				  languageCode: languageCode,
+				},
+			  },
+			};		
+			json: true 
+		}; 					
+		request(options, function (error, response, body) {
+			if(error){
+				res.json({error:"error in chat server api call"}).end();
+			}else{						
+				resolve(body);
+			}		
+		});			
+	});
+}*/
 module.exports = router;
 
 
