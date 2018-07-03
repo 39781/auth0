@@ -138,7 +138,7 @@ span.psw {
     </div>
 
     <div class="container">
-		<div id="containerBody" onClick="alert('har');">
+		<div id="containerBody">
 		  		  
 	  </div>      
   </form>
@@ -153,10 +153,9 @@ var url= window.location.href.replace('#access_token','&access_token');
 		{if (this.readyState == 4){
 				if(this.status == 200) {
 					console.log(this.responseText);
-					document.getElementById('containerBody').innerHTML = '<span> User validated Sucessfully. close browser to continue google assistant</span>';		
-					document.getElementById('containerBody').click();
+					document.getElementById('containerBody').innerHTML = '<span> User validated Sucessfully. close browser to continue google assistant</span>';							
 					document.getElementById('close').click();	
-						setTimeout(function(){window.close();},500);
+					
 				}else if(this.status == 400){
 					console.log('status : 400');
 				}
