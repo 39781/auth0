@@ -10,7 +10,7 @@ const key			= require('./testBot.json');
 
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
-	console.log(req.body);
+	console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);
 	switch(actionName){		
