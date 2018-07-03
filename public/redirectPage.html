@@ -135,7 +135,7 @@ span.psw {
   
   <form class="modal-content animate">
     <div class="imgcontainer">
-      <span onclick="window.close()" class="close" id='close' title="Close Modal" style="display:none">&times;</span>
+      <span onClick="window.close()" class="close" id='close' title="Close Modal" style="display:none">&times;</span>
       <img src="./images/Hema.png" alt="Avatar" class="avatar">
     </div>
 
@@ -155,7 +155,8 @@ var url= window.location.href.replace('#access_token','&access_token');
 		{if (this.readyState == 4){
 				if(this.status == 200) {
 					console.log(this.responseText);
-					document.getElementById('containerBody').innerHTML = '<span> User validated Sucessfully. close browser to continue google assistant</span>';										
+					document.getElementById('containerBody').innerHTML = '<span> User validated Sucessfully. close browser to continue google assistant</span>';		
+					document.getElementById('close').close();	
 				}else if(this.status == 400){
 					console.log('status : 400');
 				}
