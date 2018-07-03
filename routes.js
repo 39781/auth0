@@ -10,6 +10,7 @@ const key			= require('./testBot.json');
 
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
+	console.log(req.body);
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);
 	switch(actionName){		
@@ -90,10 +91,9 @@ var welcome = function(req, responseObj){
 		responseObj= {
 				"fulfillmentText": '',
 				"followupEventInput":{
-					"name":"mainMenu",
-					"parameters":{ 
-						text:"Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
-						session:req.originalDetectIntentRequest.payload.conversation.conversationId
+					"name":"welcomeIntent",
+					"parameters":{ 						
+						userId :'ABwppHHUz6ouuMtf5SSaIFaSffwkOVPPO4_FV_146Yz5wyGfCE03jubmYfdUMbXThrZpjvHDClxvd0U',						
 					}
 				}
 			}
