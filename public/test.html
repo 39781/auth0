@@ -1,7 +1,22 @@
-<html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Draggable - Default functionality</title>
+</head>
 <body>
-<script>
-document.write('parentwin = window.self;parentwin.opener = window.self;parentwin.close();');
+<a href="#" onclick="CloseWindow();return false;">close</a>
+<script type="text/javascript">
+var ww = window.open(window.location, '_blank');
+window.opener.close()
+function CloseWindow() {
+     if (confirm("Close Window?")) {
+       close();
+    }
+}
 </script>
 </body>
 </html>
+
+
