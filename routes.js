@@ -167,7 +167,7 @@ var dialogflowAPI = function(input, sess){
 	return new Promise(function(resolve, reject){
 		var options = { 
 			method: 'POST',
-			url: config.dialogflowAPI,
+			url: config.dialogFlowAPI,
 			headers: {
 				"Authorization": "Bearer " + config.accessToken
 			},
