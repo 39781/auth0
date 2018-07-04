@@ -192,11 +192,11 @@ var dialogflowAPI = function(input, sess){
 
 function loginSucess(agent) {  
 	let conv = agent.conv();
-     //conv.ask('Please choose an item:');
-	  //agent.add(conv);
-	  console.log('login sucess');
+     conv.ask('Please choose an item:');
+	  agent.add(conv);
+	  console.log('login sucess',agent);
 	  agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));
-	  console.log();
+	  
 }
   
 module.exports = router;
