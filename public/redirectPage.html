@@ -154,7 +154,7 @@ var url= window.location.href.replace('#access_token','&access_token');
 				if(this.status == 200) {
 					console.log(this.responseText);
 					document.getElementById('containerBody').innerHTML = '<span> User validated Sucessfully. close browser to continue google assistant</span>';			
-						alert(parent.document.getElementById('closeWin').innerHTML);
+						//alert(parent.document.getElementById('closeWin').innerHTML);
 					parent.document.getElementById('closeWin').click();	
 					
 				}else if(this.status == 400){
@@ -163,7 +163,7 @@ var url= window.location.href.replace('#access_token','&access_token');
 		}
 		}
 		xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
-		//xmlhttp.open("POST", "http://localhost:3000/accessToken");
+		//xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
 		xmlhttp.setRequestHeader("Content-Type", "application/json");
 		xmlhttp.send(JSON.stringify({'url':url}));
 </script>
