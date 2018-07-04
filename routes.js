@@ -51,7 +51,7 @@ router.post('/accessToken',function(req, res){
 	var params = url.parse(req.body.url, true).query;	
 	console.log(params);	
 	loggedUsers[params.empid] = params.access_token;
-	sendConfirmation('ABwppHHUz6ouuMtf5SSaIFaSffwkOVPPO4_FV_146Yz5wyGfCE03jubmYfdUMbXThrZpjvHDClxvd0U');
+	sendConfirmation(params.userId);
 	res.status(200);
 	res.json(params).end();
 })

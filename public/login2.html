@@ -18,9 +18,11 @@ body {
 </style>
 <body>
 <div id="closeWin" onClick="window.close()"></div>
-<iframe src="https://logintests.herokuapp.com/login1.html" frameborder="0" class='frame'></iframe>
+<iframe src="" frameborder="0" class='frame' id='ifrm'></iframe>
 </body>
 <script>
+url = 'https://logintests.herokuapp.com/login1.html?userId='+window.location.href.split('=')[1];
+document.getElementById('ifrm').src = url;
 window.onunload = function (e) {    		
     opener.somefunction('User validated Sucessfully. close browser to continue google assistant');
 };
