@@ -7,7 +7,7 @@ var path			= require("path");
 var url 			= require('url');	
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
-const { DialogflowApp } = require('actions-on-google');
+const { WebhookClient, Text } = require('dialogflow-fulfillment');
 var sessID ;
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
@@ -16,9 +16,9 @@ router.post('/botHandler',function(req, res){
 	console.log(actionName);
 	
 	if(actionName == 'input.loginSucess'){		
-		const assistant = new DialogflowApp({request: req, response: res});
+		const agent = new WebhookClient({request: request, response: response});
 		console.log('loginSuccess');
-		loginSucess(assistant);
+		loginSucess(agent);
 	}else{
 		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
 		switch(actionName){		
@@ -189,8 +189,11 @@ var dialogflowAPI = function(input, sess){
 	});
 }
 
-function loginSucess(assistant) {    
-      assistant.ask('login Sucess');
+function loginSucess(agent) {  
+	let conv = agent.conv();
+     //conv.ask('Please choose an item:');
+	  //agent.add(conv);
+	  agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));
 }
   
 module.exports = router;
