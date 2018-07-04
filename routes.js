@@ -15,7 +15,8 @@ router.post('/botHandler',function(req, res){
 	console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);	
-	agent = new WebhookClient({request: req, response: res});		
+	agent = new WebhookClient({request: req, response: res});	
+	console.log(agent);	
 	let intentMap = new Map();
 	intentMap.set('Default Welcome Intent', welcome);		
 	intentMap.set('loginSuccess', loginSucess);		
@@ -159,7 +160,7 @@ function sendConfirmation(userId){
 	});
 }
 var welcome = function(agent){
-	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :123});
+	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :123}});
 }
 /*var welcome = function(req, responseObj){
 	return new Promise(function(resolve,reject){
