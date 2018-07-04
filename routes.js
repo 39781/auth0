@@ -18,16 +18,14 @@ router.post('/botHandler',function(req, res){
 	
 	if(actionName == 'input.loginSucess'){				
 		console.log('loginSuccess');
-		loginSucess(agent);
-	}else{
 		agent = new WebhookClient({request: req, response: res});
 		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
 		let intentMap = new Map();
-		intentMap.set('Default Welcome Intent', loginSucess);
-		//intentMap.set('Default Fallback Intent', fallback);
+		intentMap.set('loginSuccess', loginSucess);		
 		agent.handleRequest(intentMap);	
-		//loginSucess(agent);
-		/*switch(actionName){		
+	}else{
+				
+		switch(actionName){		
 			case 'input.welcome':func = welcome;break;	
 		}
 		func(req.body,responseObj)
@@ -35,7 +33,7 @@ router.post('/botHandler',function(req, res){
 			console.log(result);
 			console.log(JSON.stringify(result));
 			res.json(result).end();
-		})*/
+		})
 	}
 
 });	
