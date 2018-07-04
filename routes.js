@@ -180,7 +180,7 @@ var dialogflowAPI = function(input, sess){
 		}; 					
 		request(options, function (error, response, body) {
 			if(error){
-				res.json({error:"error in chat server api call"}).end();
+				console.log(error);
 			}else{						
 				console.log(body);
 			}		
