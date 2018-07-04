@@ -22,6 +22,10 @@ router.post('/botHandler',function(req, res){
 	}else{
 		agent = new WebhookClient({request: req, response: res});
 		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
+		let intentMap = new Map();
+		intentMap.set('Default Welcome Intent', loginSuccess);
+		//intentMap.set('Default Fallback Intent', fallback);
+		agent.handleRequest(intentMap);	
 		loginSucess(agent);
 		/*switch(actionName){		
 			case 'input.welcome':func = welcome;break;	
@@ -194,8 +198,8 @@ var dialogflowAPI = function(input, sess){
 function loginSucess(agent) {  
 	/*let conv = agent.conv();
      conv.ask('Please choose an item:');
-	  agent.add(conv);
-	  console.log('login sucess',agent);*/
+	  agent.add(conv);*/
+	  console.log('login sucess',agent);	  
 	  agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));	  
 }
   
