@@ -43,7 +43,7 @@ router.post('/validateUser',function(req, res){
 })
 
 router.get('/redirectUri',function(req,res){	
-	res.redirect('https://logintests.herokuapp.com/redirectPage.html?empid='+req.query.empId+'userId='+req.query.userId);	
+	res.redirect('https://logintests.herokuapp.com/redirectPage.html?empid='+req.query.empId+'&userId='+req.query.userId);	
 });
 
 router.post('/accessToken',function(req, res){
