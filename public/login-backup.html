@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js"></script>
 <style>
 body {font-family: Arial, Helvetica, sans-serif;}
 
@@ -129,42 +128,81 @@ span.psw {
 </head>
 <body>
 
+
+
+
+
 <div id="id01" class="modal" style="display:block">
   
   <form class="modal-content animate">
     <div class="imgcontainer">
-      <span onClick="window.close()" class="close" id='close' title="Close Modal" style="display:none">&times;</span>
+      <span onclick="window.close()" class="close" id='close' title="Close Modal">&times;</span>
       <img src="./images/Hema.png" alt="Avatar" class="avatar">
     </div>
 
     <div class="container">
 		<div id="containerBody">
-		  		  
-	  </div>      
+		  <label for="uname"><b>Emp ID</b></label>
+		  <input type="text" placeholder="Emp ID" id = "uname" name="uname" required>
+
+		  <label for="psw"><b>Password</b></label>
+		  <input type="password" placeholder="Password" id="psw" name="psw" required>        
+					
+		  <button type="button" onClick="validateLogin()">Login</button>
+	  </div>
+      <label>
+        <span id="status"></span>
+      </label>
+    </div>
+    <div class="container" style="background-color:#f1f1f1">      
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
   </form>
 </div>
-<script type='text/javascript'>
-	//var redirectURL = 'https://logintests.herokuapp.com/redirectPage.html'
-var url= window.location.href.replace('#access_token','&access_token');
-//var url= redirectURL +'?access_token'+params;
-	console.log({'url':url});
+
+<script>
+var session = window.location.href.split('=')[1];
+console.log(session);
+function validateLogin() {
 	var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() 
-		{if (this.readyState == 4){
-				if(this.status == 200) {
-					console.log(this.responseText);
-					document.getElementById('containerBody').innerHTML = '<span> User validated Sucessfully. close browser to continue google assistant</span>';												
-					document.getElementById('closeWin').click();	
-					
-				}else if(this.status == 400){
-					console.log('status : 400');
-				}
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4){
+			if(this.status == 200) {		
+				document.getElementById("containerBody").innerHTML = '<label for="psw"><b>Enter OTP</b></label><input type="password" placeholder="Password" id="otp" name="otp" required><button type="button" onClick="validateOtp()">Login</button>';
+				document.getElementById("close").click();
+			}else if(this.status == 400){
+				console.log('hari');
+				alert('test');
+				document.getElementById("status").innerHTML = "invalid username/password";
+			}
 		}
+	};
+	xmlhttp.open("POST", "http://localhost:3000/validateUser");
+	xmlhttp.setRequestHeader("Content-Type", "application/json");
+	xmlhttp.send(JSON.stringify({username:document.getElementById("uname").value, password:document.getElementById("psw").value,sess:session}));	
+}
+
+function validateOtp() {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4){
+			if(this.status == 200) {				
+				document.getElementById("close").click();
+			}else if(this.status == 400){
+				document.getElementById("status").innerHTML = "invalid OTP, Please enter valid OTP";
+				document.getElementById("otp").value="";
+			}
 		}
-		xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
-		//xmlhttp.open("POST", "http://localhost:3000/accessToken");
-		xmlhttp.setRequestHeader("Content-Type", "application/json");
-		xmlhttp.send(JSON.stringify({'url':url}));
+	};
+		
+	var otp = document.getElementById('otp').value;
+
+	xmlhttp.open("POST", "http://localhost:3000/validateOtp");
+	xmlhttp.setRequestHeader("Content-Type", "application/json");
+	xmlhttp.send(JSON.stringify({"otp":otp}));	
+}
+
 </script>
+
 </body>
 </html>
