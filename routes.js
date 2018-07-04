@@ -23,10 +23,10 @@ router.post('/botHandler',function(req, res){
 		agent = new WebhookClient({request: req, response: res});
 		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
 		let intentMap = new Map();
-		intentMap.set('Default Welcome Intent', loginSuccess);
+		intentMap.set('Default Welcome Intent', loginSucess);
 		//intentMap.set('Default Fallback Intent', fallback);
 		agent.handleRequest(intentMap);	
-		loginSucess(agent);
+		//loginSucess(agent);
 		/*switch(actionName){		
 			case 'input.welcome':func = welcome;break;	
 		}
