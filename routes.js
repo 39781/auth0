@@ -9,17 +9,18 @@ const {google}		= require('googleapis');
 const key			= require('./testBot.json');
 const { WebhookClient, Text } = require('dialogflow-fulfillment');
 var sessID ;
+var agent;
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
 	console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);
 	
-	if(actionName == 'input.loginSucess'){		
-		const agent = new WebhookClient({request: req, response: res});
+	if(actionName == 'input.loginSucess'){				
 		console.log('loginSuccess');
 		loginSucess(agent);
 	}else{
+		 agent = new WebhookClient({request: req, response: res});
 		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
 		switch(actionName){		
 			case 'input.welcome':func = welcome;break;	
@@ -195,6 +196,7 @@ function loginSucess(agent) {
 	  //agent.add(conv);
 	  console.log('login sucess');
 	  agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));
+	  console.log();
 }
   
 module.exports = router;
