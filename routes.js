@@ -22,7 +22,7 @@ router.post('/botHandler',function(req, res){
 	}else{
 		agent = new WebhookClient({request: req, response: res});
 		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
-		loginSuccess(agent);
+		loginSucess(agent);
 		/*switch(actionName){		
 			case 'input.welcome':func = welcome;break;	
 		}
