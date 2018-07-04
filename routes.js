@@ -14,14 +14,15 @@ router.post('/botHandler',function(req, res){
 	console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);
-	sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
-	if(actionName == 'input.loginSucess'){
+	
+	if(actionName == 'input.loginSucess'){		
 		const assistant = new DialogflowApp({request: req, response: res});
+		console.log('loginSuccess');
 		loginSucess(assistant);
 	}else{
+		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
 		switch(actionName){		
 			case 'input.welcome':func = welcome;break;	
-				
 		}
 		func(req.body,responseObj)
 		.then(function(result){
@@ -58,7 +59,7 @@ router.post('/accessToken',function(req, res){
 	var params = url.parse(req.body.url, true).query;	
 	console.log(params);	
 	loggedUsers[params.empid] = params.access_token;
-	dialogflowAPI('loginSuccess',sessID);
+	dialogflowAPI('login Success',sessID);
 	res.status(200);
 	res.json(params).end();
 })
