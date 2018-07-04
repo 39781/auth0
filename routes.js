@@ -20,9 +20,10 @@ router.post('/botHandler',function(req, res){
 		console.log('loginSuccess');
 		loginSucess(agent);
 	}else{
-		 agent = new WebhookClient({request: req, response: res});
+		agent = new WebhookClient({request: req, response: res});
 		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
-		switch(actionName){		
+		loginSuccess(agent);
+		/*switch(actionName){		
 			case 'input.welcome':func = welcome;break;	
 		}
 		func(req.body,responseObj)
@@ -30,7 +31,7 @@ router.post('/botHandler',function(req, res){
 			console.log(result);
 			console.log(JSON.stringify(result));
 			res.json(result).end();
-		})
+		})*/
 	}
 
 });	
@@ -191,12 +192,11 @@ var dialogflowAPI = function(input, sess){
 }
 
 function loginSucess(agent) {  
-	let conv = agent.conv();
+	/*let conv = agent.conv();
      conv.ask('Please choose an item:');
 	  agent.add(conv);
-	  console.log('login sucess',agent);
-	  agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));
-	  
+	  console.log('login sucess',agent);*/
+	  agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));	  
 }
   
 module.exports = router;
