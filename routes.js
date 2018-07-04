@@ -14,16 +14,22 @@ router.post('/botHandler',function(req, res){
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
 	console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
-	console.log(actionName);
-	
-	if(actionName == 'input.loginSucess'){				
-		let intentMap = new Map();
-		intentMap.set('loginSuccess', loginSucess);		
-		agent.handleRequest(intentMap);	
+	console.log(actionName);	
+	agent = new WebhookClient({request: req, response: res});		
+	let intentMap = new Map();
+	intentMap.set('Default Welcome Intent', welcome);		
+	intentMap.set('loginSuccess', loginSucess);		
+	agent.handleRequest(intentMap);
+	sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
+	/*if(actionName == 'input.loginSucess'){				
+			
 		console.log('loginSuccess');		
 	}else{
 		agent = new WebhookClient({request: req, response: res});		
-		
+		let intentMap = new Map();
+		intentMap.set('Default Welcome Intent', welcome);		
+		intentMap.set('loginSuccess', loginSucess);		
+		agent.handleRequest(intentMap);
 		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
 		switch(actionName){		
 			case 'input.welcome':func = welcome;break;	
@@ -34,7 +40,7 @@ router.post('/botHandler',function(req, res){
 			console.log(JSON.stringify(result));
 			res.json(result).end();
 		})
-	}
+	}*/
 
 });	
 
@@ -152,8 +158,10 @@ function sendConfirmation(userId){
 	  });
 	});
 }
-
-var welcome = function(req, responseObj){
+var welcome = function(agent){
+	agent.setFollowupEvent('welcomeEvent');
+}
+/*var welcome = function(req, responseObj){
 	return new Promise(function(resolve,reject){
 		responseObj= {
 				"fulfillmentText": '',
@@ -167,7 +175,7 @@ var welcome = function(req, responseObj){
 			resolve(responseObj);		
 	});
 }
-
+*/
 var dialogflowAPI = function(input, sess){	
 	return new Promise(function(resolve, reject){
 		var options = { 
