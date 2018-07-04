@@ -65,8 +65,10 @@ function sendConfirmation(userId){
 	
 	jwtClient.authorize((err, tokens) => {
 	  // code to retrieve target userId and intent	  
-	  let notif = {  
-		title:'loginSuccess',
+	  let notif = { 
+		userNotification: {
+			title: 'AoG tips latest tip',
+		},	  
 		target: {
 		  userId: userId,
 		  intent: 'loginSuccess',
