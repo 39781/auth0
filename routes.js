@@ -160,6 +160,7 @@ function sendConfirmation(userId){
 	});
 }
 var welcome = function(agent){
+	console.log(Object.keys(agent.request_));
 	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :123}});
 }
 /*var welcome = function(req, responseObj){
