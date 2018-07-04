@@ -193,6 +193,7 @@ function loginSucess(agent) {
 	let conv = agent.conv();
      //conv.ask('Please choose an item:');
 	  //agent.add(conv);
+	  console.log('login sucess');
 	  agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));
 }
   
