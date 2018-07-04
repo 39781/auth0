@@ -18,13 +18,12 @@ router.post('/botHandler',function(req, res){
 	
 	if(actionName == 'input.loginSucess'){				
 		console.log('loginSuccess');
-		agent = new WebhookClient({request: req, response: res});
-		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
+		agent = new WebhookClient({request: req, response: res});		
 		let intentMap = new Map();
 		intentMap.set('loginSuccess', loginSucess);		
 		agent.handleRequest(intentMap);	
 	}else{
-				
+		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
 		switch(actionName){		
 			case 'input.welcome':func = welcome;break;	
 		}
