@@ -1,7 +1,24 @@
 <html>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.frame {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+  box-sizing: border-box;
+}
+</style>
 <body>
 <div id="closeWin" onClick="window.close()"></div>
-<iframe src="https://logintests.herokuapp.com/login1.html" style="height:100%;width:100%"></iframe>
+<iframe src="https://logintests.herokuapp.com/login1.html" frameborder="0" allowfullscreen ></iframe>
 </body>
 <script>
 window.onunload = function (e) {    		
