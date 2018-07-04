@@ -146,7 +146,7 @@ span.psw {
 <script>
 window.open('https://logintests.herokuapp.com/login2.html','_blank');
 window.somefunction = function(txt){
-	alert(<br>window will close within 5 secs please wait);
+	alert('<br>window will close within 5 secs please wait');
 	document.getElementById('containerBody').innerHTML = txt+'<br>window will close within 5 secs please wait';
 	setTimeout(function(){document.getElementById('close').click()},5000);
 }
