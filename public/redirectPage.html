@@ -166,6 +166,9 @@ var url= window.location.href.replace('#access_token','&access_token');
 		//xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
 		xmlhttp.setRequestHeader("Content-Type", "application/json");
 		xmlhttp.send(JSON.stringify({'url':url}));
+window.onunload = function (e) {    		
+    opener.somefunction('User validated Sucessfully. close browser to continue google assistant');
+};
 </script>
 </body>
 </html>
