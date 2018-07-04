@@ -80,7 +80,60 @@ function sendConfirmation(userId){
 		  'bearer': tokens.access_token,
 		 },
 		'json': true,
-		'body': {'customPushMessage': notif, 'isInSandbox': true},
+		'body':{
+  "user": {
+    "user_id": "ABwppHHN6aTGBrqMEdP7ELuHBpHmQNsDmAvKLgo8MUo-DGXOwFRx3rccPhIDxedp_qLFx_cZScuscWHjUQ",
+    "profile": {
+      "given_name": "John",
+      "family_name": "Doe",
+      "display_name": "John Doe"
+    }
+  },
+  "conversation": {
+    "conversation_id": "1530684885243",
+    "type": "NEW"
+  },
+  "inputs": [
+    {
+      "intent": "actions.intent.MAIN",
+      "rawInputs": [
+        {
+          "inputType": "VOICE",
+          "query": "login Success"
+        }
+      ]
+    }
+  ],
+  "surface": {
+    "capabilities": [
+      {
+        "name": "actions.capability.SCREEN_OUTPUT"
+      },
+      {
+        "name": "actions.capability.AUDIO_OUTPUT"
+      },
+      {
+        "name": "actions.capability.WEB_BROWSER"
+      },
+      {
+        "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
+      }
+    ]
+  },
+  "isInSandbox": true,
+  "availableSurfaces": [
+    {
+      "capabilities": [
+        {
+          "name": "actions.capability.SCREEN_OUTPUT"
+        },
+        {
+          "name": "actions.capability.AUDIO_OUTPUT"
+        }
+      ]
+    }
+  ]
+}
 	  }, (err, httpResponse, body) => {
 		  console.log(err,body);
 		 console.log(httpResponse.statusCode + ': ' + httpResponse.statusMessage);
