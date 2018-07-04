@@ -7,22 +7,29 @@ var path			= require("path");
 var url 			= require('url');	
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
-
-
+const { DialogflowApp } = require('actions-on-google');
+var sessID ;
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
 	console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);
-	switch(actionName){		
-		case 'input.welcome':func = welcome;break;		
+	sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
+	if(actionName == 'input.loginSucess'){
+		const assistant = new DialogflowApp({request: req, response: res});
+		loginSucess(assistant);
+	}else{
+		switch(actionName){		
+			case 'input.welcome':func = welcome;break;	
+				
+		}
+		func(req.body,responseObj)
+		.then(function(result){
+			console.log(result);
+			console.log(JSON.stringify(result));
+			res.json(result).end();
+		})
 	}
-	func(req.body,responseObj)
-	.then(function(result){
-		console.log(result);
-		console.log(JSON.stringify(result));
-		res.json(result).end();
-	})
 
 });	
 
@@ -51,7 +58,7 @@ router.post('/accessToken',function(req, res){
 	var params = url.parse(req.body.url, true).query;	
 	console.log(params);	
 	loggedUsers[params.empid] = params.access_token;
-	sendConfirmation(params.userId);
+	dialogflowAPI('loginSuccess',sessID);
 	res.status(200);
 	res.json(params).end();
 })
@@ -156,33 +163,35 @@ var welcome = function(req, responseObj){
 	});
 }
 
-/*var dialogflowAPI = function(input, sessId){	
+var dialogflowAPI = function(input, sess){	
 	return new Promise(function(resolve, reject){
 		var options = { 
 			method: 'POST',
-			url: config.dialogflowAPI.replace('sessions',sessId),
+			url: config.dialogflowAPI,
 			headers: {
 				"Authorization": "Bearer " + config.accessToken
 			},
-			body:{			  
-			  queryInput: {
-				text: {
-				  text: input,
-				  languageCode: languageCode,
-				},
-			  },
-			};		
+			body:{
+				sessionId: sess,
+				lang: "en",
+				query:input
+			},		
 			json: true 
 		}; 					
 		request(options, function (error, response, body) {
 			if(error){
 				res.json({error:"error in chat server api call"}).end();
 			}else{						
-				resolve(body);
+				console.log(body);
 			}		
 		});			
 	});
-}*/
+}
+
+function loginSucess(assistant) {    
+      assistant.ask('login Sucess');
+}
+  
 module.exports = router;
 
 

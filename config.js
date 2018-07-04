@@ -1,6 +1,7 @@
 module.exports = {
 	accessToken:"fb28796ec675402a99b7a97dd04002a1",	
-	dialogFlowAPI:"https://dialogflow.googleapis.com/v2/{sessions}:detectIntent",
+	//dialogFlowAPI:"https://dialogflow.googleapis.com/v2/{sessions}:detectIntent",
+	dialogFlowAPI:"https://api.api.ai/v1/query?v=20150910",
 	appDet:{
 		"domainName":"exeter.auth0.com",
 		"clientID":"hCg4mx_Cakni2wtASJnKpGcRntBH3ZjN",
