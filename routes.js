@@ -159,7 +159,7 @@ function sendConfirmation(userId){
 	});
 }
 var welcome = function(agent){
-	agent.setFollowupEvent('welcomeEvent');
+	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :123});
 }
 /*var welcome = function(req, responseObj){
 	return new Promise(function(resolve,reject){
