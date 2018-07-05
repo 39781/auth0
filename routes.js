@@ -12,7 +12,7 @@ var sessID ;
 
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
-	console.log(JSON.stringify(req.body));
+	//console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);	
 	const agent = new WebhookClient({request: req, response: res});	
@@ -71,8 +71,7 @@ router.post('/accessToken',function(req, res){
 	console.log(params);	
 	loggedUsers[params.userId]['empId']=params.empId;
 	loggedUsers[params.userId]['token']=params.access_token;
-		
-	console.log(loggedUsers[params.userId].agent);
+
 	triggerLoginSucess(loggedUsers[params.userId].agent);
 	res.status(200);
 	res.json(params).end();
@@ -83,6 +82,7 @@ var welcome = function(agent){
 }
 
 var triggerLoginSucess = function(agent){
+	console.log('trigger loginSuccess');
 	agent.setFollowupEvent('loginSuccess');
 }
 /*var welcome = function(req, responseObj){
@@ -102,11 +102,12 @@ var triggerLoginSucess = function(agent){
 */
 
 function loginSucess(agent) {  
-	/*let conv = agent.conv();
-     conv.ask('Please choose an item:');
-	  agent.add(conv);*/
-	  console.log('login sucess',agent);	  
-	  agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));	  
+	let conv = agent.conv();
+    conv.ask('Please choose an item:');
+	agent.add(conv);
+	console.log('login success');
+	//*	  console.log('login sucess',agent);	  
+	//agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));	  
 }
 
 function sendConfirmation(userId){
