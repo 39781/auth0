@@ -9,7 +9,7 @@ const {google}		= require('googleapis');
 const key			= require('./testBot.json');
 var jwksClient 		= require('jwks-rsa');
 const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
-var sessID ;
+var sessID;
 
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
