@@ -9,14 +9,14 @@ const {google}		= require('googleapis');
 const key			= require('./testBot.json');
 const { WebhookClient, Text } = require('dialogflow-fulfillment');
 var sessID ;
-var agent;
+
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
 	console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);	
-	agent = new WebhookClient({request: req, response: res});	
-	console.log(agent);	
+	const agent = new WebhookClient({request: req, response: res});	
+	loggedUsers[req.body.originalDetectIntentRequest.payload.user.userId]={'agent':agent}	
 	let intentMap = new Map();
 	intentMap.set('Default Welcome Intent', welcome);		
 	intentMap.set('loginSuccess', loginSucess);		
@@ -69,8 +69,11 @@ router.post('/accessToken',function(req, res){
 	console.log(req.body.url);
 	var params = url.parse(req.body.url, true).query;	
 	console.log(params);	
-	loggedUsers[params.empid] = params.access_token;
-	dialogflowAPI('login Success',sessID);
+	loggedUsers[params.userId] = {		
+		'empId':params.empId,
+		'token':params.access_token,
+	};	
+	triggerLoginSucess(loggedUsers[params.userId].agent);
 	res.status(200);
 	res.json(params).end();
 })
@@ -160,8 +163,12 @@ function sendConfirmation(userId){
 	});
 }
 var welcome = function(agent){
-	console.log(Object.keys(agent.request_));
-	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :123}});
+	console.log(JSON.stringify(agent));	
+	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :agent.request_.body.originalDetectIntentRequest.payload.user.userId}});
+}
+
+var triggerLoginSucess = function(agent){
+	agent.setFollowupEvent('loginSuccess');
 }
 /*var welcome = function(req, responseObj){
 	return new Promise(function(resolve,reject){
@@ -178,30 +185,6 @@ var welcome = function(agent){
 	});
 }
 */
-var dialogflowAPI = function(input, sess){	
-	return new Promise(function(resolve, reject){
-		var options = { 
-			method: 'POST',
-			url: config.dialogFlowAPI,
-			headers: {
-				"Authorization": "Bearer " + config.accessToken
-			},
-			body:{
-				sessionId: sess,
-				lang: "en",
-				query:input
-			},		
-			json: true 
-		}; 					
-		request(options, function (error, response, body) {
-			if(error){
-				console.log(error);
-			}else{						
-				console.log(body);
-			}		
-		});			
-	});
-}
 
 function loginSucess(agent) {  
 	/*let conv = agent.conv();
