@@ -7,6 +7,7 @@ var path			= require("path");
 var url 			= require('url');	
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
+var jwksClient 		= require('jwks-rsa');
 const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var sessID ;
 
@@ -68,10 +69,8 @@ router.get('/redirectUri',function(req,res){
 router.post('/accessToken',function(req, res){
 	console.log(req.body.url);
 	var params = url.parse(req.body.url, true).query;	
-	loggedUsers[params.userId] = {
-		'empId':params.empId,
-		'token':params.access_token
-	};			
+	loggedUsers[params.userId] = params	
+	tokenVerifier(params.id_token);
 	res.status(200);
 	res.json(params).end();
 })
@@ -126,6 +125,20 @@ function loginSucess(agent) {
 	
 	//*	  console.log('login sucess',agent);	  
 	//agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));	  
+}
+function tokenVerifier(idToken){
+	var client = jwksClient({
+		jwksUri: 'https://exeter.auth0.com/.well-known/jwks.json'
+	});
+	function getKey(header, callback){
+	  client.getSigningKey(header.kid, function(err, key) {
+		var signingKey = key.publicKey || key.rsaPublicKey;
+		callback(null, signingKey);
+	  });
+	}
+	jwt.verify(idToken, getKey, {algorithms:'RS256',issuer:'https://exeter.auth0.com'}, function(err, decoded) {
+	  console.log(decoded) // bar
+	});
 }
 
 function sendConfirmation(session){
