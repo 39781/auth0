@@ -127,7 +127,7 @@ function sendConfirmation(session){
 		  'bearer': tokens.access_token,
 		 },
 		'json': true,
-		'body':{"queryInput":{"event":{"name":"loginSuccess","languageCode":"en"}}}
+		'body':{"queryInput":{"event":{"name":"loginSuccessEvent","languageCode":"en"}}}
 	  }, (err, httpResponse, body) => {
 		  console.log(err,body);
 		 console.log(httpResponse.statusCode + ': ' + httpResponse.statusMessage);
