@@ -90,9 +90,10 @@ var userCheck = function(agent){
 		agent.add(new Suggestion('People Soft'));
 		agent.add(new Suggestion('Work Day'));
 	}else{		
-		agent.add(new Text({'text': `people Soft/workday`, 'ssml': `<speak>Hi<break time='5s'/>people Soft/workday</speak>` }));		
+		agent.add(new Payload(agent.request_.body.queryResult.fulfillmentMessages));
+		/*agent.add(new Text({'text': `people Soft/workday`, 'ssml': `<speak>Hi<break time='5s'/>people Soft/workday</speak>` }));		
 		agent.add(new Suggestion('People Soft'));
-		agent.add(new Suggestion('Work Day'));
+		agent.add(new Suggestion('Work Day'));*/
 	}	
 	//agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :agent.request_.body.originalDetectIntentRequest.payload.user.userId}});
 }
