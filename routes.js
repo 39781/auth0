@@ -20,7 +20,7 @@ router.post('/botHandler',function(req, res){
 	let intentMap = new Map();	
 	var intentsLen = config.intents.length;
 	for(i=0;i<intentsLen;i++){
-		intentMap.set(config.intents.length[i],userCheck);
+		intentMap.set(config.intents[i],userCheck);
 	}
 	agent.handleRequest(intentMap);
 	sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;	
