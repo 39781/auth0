@@ -79,8 +79,7 @@ router.post('/accessToken',function(req, res){
 	res.json(params).end();
 })
 
-var welcome = function(agent){
-	console.log(JSON.stringify(agent));	
+var welcome = function(agent){	
 	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :agent.request_.body.originalDetectIntentRequest.payload.user.userId}});
 }
 
