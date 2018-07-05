@@ -7,7 +7,7 @@ var path			= require("path");
 var url 			= require('url');	
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
-const { WebhookClient, Text, Card, Payload } = require('dialogflow-fulfillment');
+const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var sessID ;
 
 router.post('/botHandler',function(req, res){		
