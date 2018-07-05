@@ -17,8 +17,7 @@ router.post('/botHandler',function(req, res){
 	console.log(actionName);	
 	const agent = new WebhookClient({request: req, response: res});	
 	loggedUsers[req.body.originalDetectIntentRequest.payload.user.userId]={'agent':agent}	
-	let intentMap = new Map();
-	setTimeout(function(){triggerLoginSucess(agent);},5000)
+	let intentMap = new Map();	
 	intentMap.set('Default Welcome Intent', welcome);			
 	intentMap.set('loginSuccess', loginSucess);		
 	agent.handleRequest(intentMap);
