@@ -18,32 +18,12 @@ router.post('/botHandler',function(req, res){
 	console.log(actionName);	
 	const agent = new WebhookClient({request: req, response: res});	
 	let intentMap = new Map();	
-	intentMap.set('Default Welcome Intent',userCheck);			
-	intentMap.set('peopleSoft', userCheck);
-	intentMap.set('workDay', userCheck);			
+	var intentsLen = config.intents.length;
+	for(i=0;i<intentsLen;i++){
+		intentMap.set(config.intents.length[i],userCheck);
+	}
 	agent.handleRequest(intentMap);
-	sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
-	/*if(actionName == 'input.loginSucess'){				
-			
-		console.log('loginSuccess');		
-	}else{
-		agent = new WebhookClient({request: req, response: res});		
-		let intentMap = new Map();
-		intentMap.set('Default Welcome Intent', welcome);		
-		intentMap.set('loginSuccess', loginSucess);		
-		agent.handleRequest(intentMap);
-		sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
-		switch(actionName){		
-			case 'input.welcome':func = welcome;break;	
-		}
-		func(req.body,responseObj)
-		.then(function(result){
-			console.log(result);
-			console.log(JSON.stringify(result));
-			res.json(result).end();
-		})
-	}*/
-
+	sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;	
 });	
 
 router.post('/validateUser',function(req, res){
@@ -89,7 +69,8 @@ var userCheck = function(agent){
 		agent.add(new Suggestion('People Soft'));
 		agent.add(new Suggestion('Work Day'));
 	}else{		
-		agent.add(new Payload(agent.request_.body.queryResult.fulfillmentMessages));
+		agent.add(agent.consoleMessages); 
+		//agent.add(new Payload(agent.request_.body.queryResult.fulfillmentMessages));
 		/*agent.add(new Text({'text': `people Soft/workday`, 'ssml': `<speak>Hi<break time='5s'/>people Soft/workday</speak>` }));		
 		agent.add(new Suggestion('People Soft'));
 		agent.add(new Suggestion('Work Day'));*/
@@ -97,35 +78,7 @@ var userCheck = function(agent){
 	//agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :agent.request_.body.originalDetectIntentRequest.payload.user.userId}});
 }
 
-var triggerLoginSucess = function(agent){
-	console.log('trigger loginSuccess');
-	agent.setFollowupEvent('loginSuccessEvent');
-}
-/*var welcome = function(req, responseObj){
-	return new Promise(function(resolve,reject){
-		responseObj= {
-				"fulfillmentText": '',
-				"followupEventInput":{
-					"name":"welcomeEvent",
-					"parameters":{ 						
-						userId :req.originalDetectIntentRequest.payload.user.userId,						
-					}
-				}
-			}
-			resolve(responseObj);		
-	});
-}
-*/
 
-function loginSucess(agent) {  
-	console.log('login success');
-	let conv = agent.conv();
-    conv.ask('Please choose an item:');
-	agent.add(conv);
-	
-	//*	  console.log('login sucess',agent);	  
-	//agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));	  
-}
 function tokenVerifier(idToken){
 	var client = jwksClient({
 		jwksUri: 'https://exeter.auth0.com/.well-known/jwks.json'
@@ -141,7 +94,7 @@ function tokenVerifier(idToken){
 	});
 }
 
-function sendConfirmation(session){
+/*function sendConfirmation(session){
 	let jwtClient = new google.auth.JWT(
 	  key.client_email, null, key.private_key,
 	  ['https://www.googleapis.com/auth/cloud-platform'],
@@ -160,7 +113,7 @@ function sendConfirmation(session){
 		 console.log(httpResponse.statusCode + ': ' + httpResponse.statusMessage);
 	  });
 	});
-}
+}*/
 
   
 module.exports = router;
