@@ -84,7 +84,7 @@ var welcome = function(agent){
 
 var triggerLoginSucess = function(agent){
 	console.log('trigger loginSuccess');
-	agent.setFollowupEvent('loginSuccess');
+	agent.setFollowupEvent('loginSuccessEvent');
 }
 /*var welcome = function(req, responseObj){
 	return new Promise(function(resolve,reject){
@@ -103,10 +103,11 @@ var triggerLoginSucess = function(agent){
 */
 
 function loginSucess(agent) {  
+	console.log('login success');
 	let conv = agent.conv();
     conv.ask('Please choose an item:');
 	agent.add(conv);
-	console.log('login success');
+	
 	//*	  console.log('login sucess',agent);	  
 	//agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));	  
 }
