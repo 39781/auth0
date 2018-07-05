@@ -18,7 +18,8 @@ router.post('/botHandler',function(req, res){
 	const agent = new WebhookClient({request: req, response: res});	
 	loggedUsers[req.body.originalDetectIntentRequest.payload.user.userId]={'agent':agent}	
 	let intentMap = new Map();
-	intentMap.set('Default Welcome Intent', welcome);		
+	setTimeout(function(){welcome(agent);},5000)
+	intentMap.set('Default Welcome Intent', welcome);			
 	intentMap.set('loginSuccess', loginSucess);		
 	agent.handleRequest(intentMap);
 	sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
