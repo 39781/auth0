@@ -69,10 +69,9 @@ router.post('/accessToken',function(req, res){
 	console.log(req.body.url);
 	var params = url.parse(req.body.url, true).query;	
 	console.log(params);	
-	loggedUsers[params.userId] = {		
-		'empId':params.empId,
-		'token':params.access_token,
-	};	
+	loggedUsers[params.userId]['empId']=params.empId;
+	loggedUsers[params.userId]['token']=params.access_token;
+		
 	console.log(loggedUsers[params.userId].agent);
 	triggerLoginSucess(loggedUsers[params.userId].agent);
 	res.status(200);
