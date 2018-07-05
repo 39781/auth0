@@ -73,10 +73,43 @@ router.post('/accessToken',function(req, res){
 		'empId':params.empId,
 		'token':params.access_token,
 	};	
+	console.log(loggedUsers[params.userId].agent);
 	triggerLoginSucess(loggedUsers[params.userId].agent);
 	res.status(200);
 	res.json(params).end();
 })
+
+var welcome = function(agent){
+	console.log(JSON.stringify(agent));	
+	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :agent.request_.body.originalDetectIntentRequest.payload.user.userId}});
+}
+
+var triggerLoginSucess = function(agent){
+	agent.setFollowupEvent('loginSuccess');
+}
+/*var welcome = function(req, responseObj){
+	return new Promise(function(resolve,reject){
+		responseObj= {
+				"fulfillmentText": '',
+				"followupEventInput":{
+					"name":"welcomeEvent",
+					"parameters":{ 						
+						userId :req.originalDetectIntentRequest.payload.user.userId,						
+					}
+				}
+			}
+			resolve(responseObj);		
+	});
+}
+*/
+
+function loginSucess(agent) {  
+	/*let conv = agent.conv();
+     conv.ask('Please choose an item:');
+	  agent.add(conv);*/
+	  console.log('login sucess',agent);	  
+	  agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));	  
+}
 
 function sendConfirmation(userId){
 	let jwtClient = new google.auth.JWT(
@@ -162,37 +195,7 @@ function sendConfirmation(userId){
 	  });
 	});
 }
-var welcome = function(agent){
-	console.log(JSON.stringify(agent));	
-	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :agent.request_.body.originalDetectIntentRequest.payload.user.userId}});
-}
 
-var triggerLoginSucess = function(agent){
-	agent.setFollowupEvent('loginSuccess');
-}
-/*var welcome = function(req, responseObj){
-	return new Promise(function(resolve,reject){
-		responseObj= {
-				"fulfillmentText": '',
-				"followupEventInput":{
-					"name":"welcomeEvent",
-					"parameters":{ 						
-						userId :req.originalDetectIntentRequest.payload.user.userId,						
-					}
-				}
-			}
-			resolve(responseObj);		
-	});
-}
-*/
-
-function loginSucess(agent) {  
-	/*let conv = agent.conv();
-     conv.ask('Please choose an item:');
-	  agent.add(conv);*/
-	  console.log('login sucess',agent);	  
-	  agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));	  
-}
   
 module.exports = router;
 
