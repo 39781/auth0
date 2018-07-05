@@ -7,7 +7,7 @@ var path			= require("path");
 var url 			= require('url');	
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
-const { WebhookClient, Text } = require('dialogflow-fulfillment');
+const { WebhookClient, Text, Card, Payload } = require('dialogflow-fulfillment');
 var sessID ;
 
 router.post('/botHandler',function(req, res){		
@@ -16,13 +16,10 @@ router.post('/botHandler',function(req, res){
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);	
 	const agent = new WebhookClient({request: req, response: res});	
-	loggedUsers[req.body.originalDetectIntentRequest.payload.user.userId]={
-		'agent':agent,
-		'session':	req.body.session
-	}	
 	let intentMap = new Map();	
-	intentMap.set('Default Welcome Intent', welcome);			
-	intentMap.set('loginSuccess', loginSucess);		
+	intentMap.set('Default Welcome Intent',userCheck);			
+	intentMap.set('peopleSoft', userCheck);
+	intentMap.set('workDay', userCheck);			
 	agent.handleRequest(intentMap);
 	sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;
 	/*if(actionName == 'input.loginSucess'){				
@@ -71,17 +68,33 @@ router.get('/redirectUri',function(req,res){
 router.post('/accessToken',function(req, res){
 	console.log(req.body.url);
 	var params = url.parse(req.body.url, true).query;	
-	console.log(params);	
-	loggedUsers[params.userId]['empId']=params.empId;
-	loggedUsers[params.userId]['token']=params.access_token;
-	sendConfirmation(loggedUsers[params.userId]['session']);
+	loggedUsers[params.userId] = {
+		'empId':params.empId,
+		'token':params.access_token
+	};			
 	res.status(200);
 	res.json(params).end();
 })
 
-var welcome = function(agent){	
-	console.log('welcome');
-	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :agent.request_.body.originalDetectIntentRequest.payload.user.userId}});
+var userCheck = function(agent){		
+	console.log(JSON.stringify(agent.request_.body));
+	var uid = agent.request_.body.originalDetectIntentRequest.payload.user.userId;
+	if(typeof(loggedUsers[uid])=='undefined'){
+		agent.add(new Text({'text': `Welcome to Hexa Hema!`, 'ssml': `<speak>Hi<break time='5s'/>Welcome to Hexa Hema</speak>` }));
+		agent.add(new Card({
+			title: 'Login ',		
+			text: 'Please click login to get access me',
+			buttonText: 'Login', 
+			buttonUrl: 'https://logintests.herokuapp.com/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
+		}));
+		agent.add(new Suggestion('People Soft'));
+		agent.add(new Suggestion('Work Day'));
+	}else{		
+		agent.add(new Text({'text': `people Soft/workday`, 'ssml': `<speak>Hi<break time='5s'/>people Soft/workday</speak>` }));		
+		agent.add(new Suggestion('People Soft'));
+		agent.add(new Suggestion('Work Day'));
+	}	
+	//agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :agent.request_.body.originalDetectIntentRequest.payload.user.userId}});
 }
 
 var triggerLoginSucess = function(agent){
