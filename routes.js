@@ -16,7 +16,10 @@ router.post('/botHandler',function(req, res){
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);	
 	const agent = new WebhookClient({request: req, response: res});	
-	loggedUsers[req.body.originalDetectIntentRequest.payload.user.userId]={'agent':agent}	
+	loggedUsers[req.body.originalDetectIntentRequest.payload.user.userId]={
+		'agent':agent,
+		'session':	req.body.session
+	}	
 	let intentMap = new Map();	
 	intentMap.set('Default Welcome Intent', welcome);			
 	intentMap.set('loginSuccess', loginSucess);		
@@ -71,8 +74,7 @@ router.post('/accessToken',function(req, res){
 	console.log(params);	
 	loggedUsers[params.userId]['empId']=params.empId;
 	loggedUsers[params.userId]['token']=params.access_token;
-
-	triggerLoginSucess(loggedUsers[params.userId].agent);
+	sendConfirmation(loggedUsers[params.userId]['session']);
 	res.status(200);
 	res.json(params).end();
 })
@@ -80,7 +82,6 @@ router.post('/accessToken',function(req, res){
 var welcome = function(agent){	
 	console.log('welcome');
 	agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :agent.request_.body.originalDetectIntentRequest.payload.user.userId}});
-	agent.setFollowupEvent('loginSuccessEvent');
 }
 
 var triggerLoginSucess = function(agent){
@@ -113,84 +114,20 @@ function loginSucess(agent) {
 	//agent.add(new Text({'text': `Login Success!`, 'ssml': `<speak>Hi<break time='5s'/>Login Success</speak>` }));	  
 }
 
-function sendConfirmation(userId){
+function sendConfirmation(session){
 	let jwtClient = new google.auth.JWT(
 	  key.client_email, null, key.private_key,
-	  ['https://www.googleapis.com/auth/actions.fulfillment.conversation'],
+	  ['https://www.googleapis.com/auth/cloud-platform'],
 	  null
-	);
-	
-	jwtClient.authorize((err, tokens) => {
-	  // code to retrieve target userId and intent	  
-	  let notif = { 
-		userNotification: {
-			title: 'AoG tips latest tip',
-		},	  
-		target: {
-		  userId: userId,
-		  intent: 'loginSuccess',
-		},
-	  };	  	  
-
-	  request.post('https://actions.googleapis.com/v2/conversations:send', {
+	);	
+	//https://actions.googleapis.com/v2/conversations:send
+	jwtClient.authorize((err, tokens) => {	 
+	  request.post(config.dialogFlowAPI.replace('sessions', session), {
 		'auth': {
 		  'bearer': tokens.access_token,
 		 },
 		'json': true,
-		'body':{
-  "user": {
-    "user_id": "ABwppHHN6aTGBrqMEdP7ELuHBpHmQNsDmAvKLgo8MUo-DGXOwFRx3rccPhIDxedp_qLFx_cZScuscWHjUQ",
-    "profile": {
-      "given_name": "John",
-      "family_name": "Doe",
-      "display_name": "John Doe"
-    }
-  },
-  "conversation": {
-    "conversation_id": "1530684885243",
-    "type": "NEW"
-  },
-  "inputs": [
-    {
-      "intent": "actions.intent.MAIN",
-      "rawInputs": [
-        {
-          "inputType": "VOICE",
-          "query": "login Success"
-        }
-      ]
-    }
-  ],
-  "surface": {
-    "capabilities": [
-      {
-        "name": "actions.capability.SCREEN_OUTPUT"
-      },
-      {
-        "name": "actions.capability.AUDIO_OUTPUT"
-      },
-      {
-        "name": "actions.capability.WEB_BROWSER"
-      },
-      {
-        "name": "actions.capability.MEDIA_RESPONSE_AUDIO"
-      }
-    ]
-  },
-  "isInSandbox": true,
-  "availableSurfaces": [
-    {
-      "capabilities": [
-        {
-          "name": "actions.capability.SCREEN_OUTPUT"
-        },
-        {
-          "name": "actions.capability.AUDIO_OUTPUT"
-        }
-      ]
-    }
-  ]
-}
+		'body':{"queryInput":{"event":{"name":"loginSuccess","languageCode":"en"}}}
 	  }, (err, httpResponse, body) => {
 		  console.log(err,body);
 		 console.log(httpResponse.statusCode + ': ' + httpResponse.statusMessage);
