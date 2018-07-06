@@ -8,6 +8,8 @@ var url 			= require('url');
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
 var jwksClient 		= require('jwks-rsa');
+var jwt = require('jsonwebtoken');
+
 const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var sessID;
 
