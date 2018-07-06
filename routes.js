@@ -59,7 +59,7 @@ router.post('/accessToken',function(req, res){
 router.get('/test',function(req, res){
 	res.send('hi i am test');
 	res.end();
-}
+});
 
 var userCheck = function(agent){		
 	console.log(JSON.stringify(agent.request_.body));
