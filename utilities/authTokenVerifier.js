@@ -14,8 +14,10 @@ module.exports	=	{
 		}
 		jwt.verify(idToken, getKey, {algorithms:params.alg,issuer:params.issuer,audience:params.audience}, function(err, decoded) {
 			if(err){
+				console.log(err);
 				return false;
 			}else{
+				console.log(decoded);
 				return true;
 			}			
 		});
