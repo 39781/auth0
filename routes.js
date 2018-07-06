@@ -52,7 +52,7 @@ router.post('/accessToken',function(req, res){
 	console.log(req.body.url);
 	var params = url.parse(req.body.url, true).query;	
 	loggedUsers[params.userId] = params	
-	tokenVerifier(params.id_token);
+	tokenVerifier(params.id_token,);
 	res.status(200);
 	res.json(params).end();
 })
@@ -91,7 +91,7 @@ function tokenVerifier(idToken){
 		callback(null, signingKey);
 	  });
 	}
-	jwt.verify(idToken, getKey, {algorithms:['RS256']}, function(err, decoded) {
+	jwt.verify(idToken, getKey, {algorithms:['RS256'],issuer:config.appDet.issuer,audience:config.appDet.audience}, function(err, decoded) {
 		console.log(err);
 		console.log(decoded) // bar
 	});

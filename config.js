@@ -7,7 +7,8 @@ module.exports = {
 		"domainName":"exeter.auth0.com",
 		"clientID":"hCg4mx_Cakni2wtASJnKpGcRntBH3ZjN",
 		"clientSecret":"BHKd9RjFpywi67W_5LeX9hslKGlpnBh3zOhXE-CowRgIFQXB-ifgIQtnRlEBazlM",
-		"redirectUri":'https://logintests.herokuapp.com/redirectUri'
+		"redirectUri":'https://logintests.herokuapp.com/redirectUri',
+		'issuer':'https://exeter.auth0.com/'
 	},
 	responseObj: {
 	  "payload": {
