@@ -56,6 +56,11 @@ router.post('/accessToken',function(req, res){
 	res.json(params).end();
 })
 
+router.get('/test',function(req, res){
+	res.send('hi i am test');
+	res.end();
+}
+
 var userCheck = function(agent){		
 	console.log(JSON.stringify(agent.request_.body));
 	var uid = agent.request_.body.originalDetectIntentRequest.payload.user.userId;
