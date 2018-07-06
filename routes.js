@@ -91,9 +91,9 @@ function tokenVerifier(idToken){
 		callback(null, signingKey);
 	  });
 	}
-	jwt.verify(idToken, getKey, {algorithms:'RS256',issuer:'https://exeter.auth0.com'}, function(err, decoded) {
+	jwt.verify(idToken, getKey, {algorithms:'RS256',issuer:'https://exeter.auth0.com.auth0.com'}, function(err, decoded) {
 		console.log(err);
-	  console.log(decoded) // bar
+		console.log(decoded) // bar
 	});
 }
 
