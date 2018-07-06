@@ -7,8 +7,7 @@ var path			= require("path");
 var url 			= require('url');	
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
-var jwksClient 		= require('jwks-rsa');
-var jwt = require('jsonwebtoken');
+const tokenVerifier = require('./utilities/authTokenVerifier.js');
 
 const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var sessID;
@@ -60,42 +59,35 @@ router.post('/accessToken',function(req, res){
 var userCheck = function(agent){		
 	console.log(JSON.stringify(agent.request_.body));
 	var uid = agent.request_.body.originalDetectIntentRequest.payload.user.userId;
-	if(typeof(loggedUsers[uid])=='undefined'){
-		agent.add(new Text({'text': `Welcome to Hexa Hema!`, 'ssml': `<speak>Hi<break time='5s'/>Welcome to Hexa Hema</speak>` }));
-		agent.add(new Card({
-			title: 'Login ',		
-			text: 'Please click login to get access me',
-			buttonText: 'Login', 
-			buttonUrl: 'https://logintests.herokuapp.com/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
-		}));
-		agent.add(new Suggestion('People Soft'));
-		agent.add(new Suggestion('Work Day'));
-	}else{		
-		agent.add(agent.consoleMessages); 
-		//agent.add(new Payload(agent.request_.body.queryResult.fulfillmentMessages));
-		/*agent.add(new Text({'text': `people Soft/workday`, 'ssml': `<speak>Hi<break time='5s'/>people Soft/workday</speak>` }));		
-		agent.add(new Suggestion('People Soft'));
-		agent.add(new Suggestion('Work Day'));*/
-	}	
-	//agent.setFollowupEvent({name:'welcomeEvent',parameters:{userId :agent.request_.body.originalDetectIntentRequest.payload.user.userId}});
-}
-
-
-function tokenVerifier(idToken){
-	var client = jwksClient({
-		jwksUri: 'https://exeter.auth0.com/.well-known/jwks.json'
-	});
-	function getKey(header, callback){
-	  client.getSigningKey(header.kid, function(err, key) {
-		var signingKey = key.publicKey || key.rsaPublicKey;
-		callback(null, signingKey);
-	  });
+	if(typeof(loggedUsers[uid])!='undefined'){
+		var options = {
+			idToken:loggedUsers[uid].id_token,
+			issuer:config.appDet.issuer,
+			audience:config.appDet.audience			
+		};
+		if(tokenVerifier(options)){		
+			agent.add(agent.consoleMessages); 
+			return
+		}
+		textResp = 'You are not a authorized user, please login'
+	}else{
+		textResp = 'Welcome to Hexa Hema!';
 	}
-	jwt.verify(idToken, getKey, {algorithms:['RS256'],issuer:config.appDet.issuer,audience:config.appDet.audience}, function(err, decoded) {
-		console.log(err);
-		console.log(decoded) // bar
-	});
+	agent.add(new Text({'text': textResp, 'ssml': "<speak>Hi<break time='5s'/>"+textResp+"</speak>"}));
+	agent.add(new Card({
+		title: 'Login ',		
+		text: 'Please click login to get access me',
+		buttonText: 'Login', 
+		buttonUrl: 'https://logintests.herokuapp.com/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
+	}));
+	agent.add(new Suggestion('People Soft'));
+	agent.add(new Suggestion('Work Day'));
 }
+
+
+
+
+
 
 /*function sendConfirmation(session){
 	let jwtClient = new google.auth.JWT(
