@@ -7,10 +7,55 @@ var path			= require("path");
 var url 			= require('url');	
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
-const tokenVerifier = require('./utilities/authTokenVerifier.js');
-
+const Auth0TokenVerifier = require('./utilities/authTokenVerifier.js');
+const adAuthen		 = require('./utilities/adAthentication.js');
+const jwtMiddleware = require('express-jwt')
+var jwksClient 		= require('jwks-rsa');
 const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var sessID;
+
+router.use('/auth0', jwtMiddleware({
+  secret: jwksClient.expressJwtSecret({
+			cache: true,
+			rateLimit: true,
+			jwksRequestsPerMinute: 5,
+			jwksUri: config.appDet.jwksUri
+		  }), 
+  getToken: function (req) {
+	  console.log(req.headers)
+    if (req.headers.authorization){
+		var auth = req.headers.authorization.split(' ');
+		if(auth[0] === 'Bearer'){
+			return auth[1];
+		}else{
+			return null;
+		}			
+    } else if (req.query && req.query.token) {
+		return req.query.token;
+      return req.query.token;
+    } else if (req.cookies && req.cookies.token) {      
+      return req.cookies.token;
+    }    
+    return null; 
+  }
+}));
+
+router.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('your are not authorized person to get information. please login get authorization');
+  }
+});
+
+router.post('/auth0/callAPI', function(req,res){
+	request.get(req.body.api, {'json': true}, (err, httpResponse, body) => {
+		 if(err){
+			 res.json(err).end();
+		 }else{
+			 res.json(body).end();
+		 }		 
+	});	
+});
+
 
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
@@ -27,39 +72,78 @@ router.post('/botHandler',function(req, res){
 	sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;	
 });	
 
+
 router.post('/validateUser',function(req, res){
 	var accDet = {};
-	if(typeof(config.employees[req.body.username])=='undefined'){
+	var adConfig = JSON.parse(JSON.stringify(config.adCred));
+		adConfig['user'] ={
+			username : req.body.username,
+			password : req.body.passwd
+		};			
+	adAuthen.authenticateAD(adConfig)
+	.then(function(result){
+		if(!result){
+			res.status(400);
+			res.json({status:'invalid user'}).end();
+		}else{
+			accDet['domainName'] = config.appDet.domainName;
+			accDet['clientID'] = config.appDet.clientID,
+			accDet['phoneNumber'] = config.employees[req.body.username].ph;
+			accDet['redirectUri'] = config.appDet.redirectUri;
+			console.log({status:'valid user','accDet':accDet});
+			res.status(200);
+			res.json({status:'valid user','accDet':accDet}).end();
+		}
+	})
+	.catch(function(err){
 		res.status(400);
-		res.json({status:'invalid user'}).end();		
-	}else{
-		accDet['domainName'] = config.appDet.domainName;
-		accDet['clientID'] = config.appDet.clientID,
-		accDet['phoneNumber'] = config.employees[req.body.username].ph;
-		accDet['redirectUri'] = config.appDet.redirectUri;
-		console.log({status:'valid user','accDet':accDet});
-		res.status(200);
-		res.json({status:'valid user','accDet':accDet}).end();
-	}
+		res.json({status:'Technical Issue'}).end();
+	});	
 })
 
 router.get('/redirectUri',function(req,res){	
-	res.redirect('https://logintests.herokuapp.com/redirectPage.html?empid='+req.query.empId+'&userId='+req.query.userId);	
+	res.redirect('http://localhost:3000/redirectPage.html?sno='+req.query.sno+'&empId='+req.query.empId+'&userId='+req.query.userId);	
 });
+
 
 router.post('/accessToken',function(req, res){
 	console.log(req.body.url);
-	var params = url.parse(req.body.url, true).query;	
-	loggedUsers[params.userId] = params	
-	tokenVerifier(params.id_token,);
-	res.status(200);
-	res.json(params).end();
+	var params = url.parse(req.body.url, true).query;		
+	var redirectUrl='close'
+	if(params.sno==2){
+		loggedUsers[params.userId]['access_token'] = params.access_token;		
+		console.log(loggedUsers[params.userId]);
+		console.log('redirecurl',redirectUrl);
+		testAccessTokenValidation(params.access_token,config.apis[0]);
+		res.header('content-type','text/plain');
+		res.status(200);
+		res.json(redirectUrl).end();
+	}else{
+		loggedUsers[params.userId] = params	
+		redirectUrl = config.appDet.authorize+'?scope='+config.appDet.scope+'&audience='+config.appDet.audience+'&response_type='+config.appDet.responseType+'&client_id='+config.appDet.clientID+'&redirect_uri='+encodeURIComponent("http://localhost:3000/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&nonce='+params.access_token+'&prompt=none';
+		console.log(redirectUrl);		
+		res.header('content-type','text/plain');
+		res.status(200);
+		res.send(redirectUrl);
+		res.end();
+	}
+	console.log(params);			
+			
+	//tokenVerifier(params.id_token,);*/	
 })
 
-router.get('/test',function(req, res){
-	res.send('hi i am test');
-	res.end();
-});
+var testAccessTokenValidation = function(token, peopleSoftAPI){
+	request.post('http://localhost:3000/auth0/callAPI', {
+		'auth': {
+		  'bearer': token
+		 },
+		'json': true,
+		'body':{api:peopleSoftAPI}
+		}, (err, httpResponse, body) => {
+		  console.log(err,body);
+		 console.log(httpResponse.statusCode + ': ' + httpResponse.statusMessage);
+	});
+}
 
 var userCheck = function(agent){		
 	console.log(JSON.stringify(agent.request_.body));
@@ -70,7 +154,7 @@ var userCheck = function(agent){
 			issuer:config.appDet.issuer,
 			audience:config.appDet.audience			
 		};
-		if(tokenVerifier(options)){		
+		if(Auth0TokenVerifier.tokenVerifier(options)){		
 			agent.add(agent.consoleMessages); 
 			return
 		}
@@ -83,7 +167,7 @@ var userCheck = function(agent){
 		title: 'Login ',		
 		text: 'Please click login to get access me',
 		buttonText: 'Login', 
-		buttonUrl: 'https://logintests.herokuapp.com/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
+		buttonUrl: 'http://localhost:3000/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
 	}));
 	agent.add(new Suggestion('People Soft'));
 	agent.add(new Suggestion('Work Day'));

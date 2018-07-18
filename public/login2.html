@@ -5,7 +5,7 @@ body {
   padding: 0;
 }
 
-.frame {
+.frame {	
   display: block;
   width: 100vw;
   height: 100vh;
@@ -21,7 +21,8 @@ body {
 <iframe src="" frameborder="0" class='frame' id='ifrm'></iframe>
 </body>
 <script>
-url = 'https://logintests.herokuapp.com/login1.html?userId='+window.location.href.split('=')[1];
+console.log(window.location.href);
+url = 'http://localhost:3000/login1.html?userId='+window.location.href.split('=')[1];
 document.getElementById('ifrm').src = url;
 window.onunload = function (e) {    		
     opener.somefunction('User validated Sucessfully. close browser to continue google assistant');

@@ -2,22 +2,28 @@
 <html>
 <body>
 <script type='text/javascript'>
-	//var redirectURL = 'https://logintests.herokuapp.com/redirectPage.html'
+	//var redirectURL = 'http://localhost:3000/redirectPage.html'
 var url= window.location.href.replace('#access_token','&access_token');
 //var url= redirectURL +'?access_token'+params;
 	console.log({'url':url});
 	var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function() 
 		{if (this.readyState == 4){
-				if(this.status == 200) {					
-					parent.document.getElementById('closeWin').click();	
+				if(this.status == 200) {
+					console.log(this.responseText);
+					if(this.responseText.indexOf('close')>=0){
+						alert('ari');
+						parent.document.getElementById('closeWin').click();	
+					}else{
+						window.location.href=this.responseText;
+					}
 				}else if(this.status == 400){
 					console.log('status : 400');
 				}
 		}
 		}
-		xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
-		//xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
+		xmlhttp.open("POST", "http://localhost:3000/accessToken");
+		//xmlhttp.open("POST", "http://localhost:3000/accessToken");
 		xmlhttp.setRequestHeader("Content-Type", "application/json");
 		xmlhttp.send(JSON.stringify({'url':url}));
 </script>

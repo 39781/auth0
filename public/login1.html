@@ -145,7 +145,8 @@ span.psw {
 		<div id="containerBody">
 		  <label for="uname"><b>Emp ID</b></label>
 		  <input type="text" placeholder="Emp ID" id = "uname" name="uname" required>
-		       					
+		  <label for="pwd"><b>Password</b></label>
+		  <input type="password" placeholder="Password" id = "pwd" name="pwd" required>     					
 		  <button type="button" onClick="validateLogin()">Login</button>
 	  </div>
       <label>
@@ -157,28 +158,26 @@ span.psw {
     </div>
   </form>
 </div>
-
-
-
-     
-
 <script>
+
 var webAuth;
 var session = window.location.href.split('=')[1];
 console.log(session);
+
 function validateLogin() {
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4){
 			if(this.status == 200) {	
+			document.getElementById("status").innerHTML="";
 			var accDet = JSON.parse(this.responseText).accDet;	
 			console.log(accDet);
 			webAuth = new auth0.WebAuth({
 				domain:       accDet.domainName,
-				clientID:     accDet.clientID,
+				clientID:     accDet.clientID,				
 				responseType: 'token',
-				redirectUri: accDet.redirectUri+'?empId='+document.getElementById("uname").value+'&userId='+session,
-				responseType: 'token id_token'
+				redirectUri: accDet.redirectUri+'?sno=1&empId='+document.getElementById("uname").value+'&userId='+session,
+				responseType: 'token id_token'				
 			  }); 
 			  var respText = '<label for="psw"><b>Enter OTP</b></label><input type="password" placeholder="Password" id="otp" name="otp" required><button type="button" onClick="validateOtp('+accDet.phoneNumber+')">Login</button>';
 			// Send a verification code using SMS			
@@ -196,14 +195,19 @@ function validateLogin() {
 			  );
 			}else if(this.status == 400){
 				console.log('hari');
-				alert('test');
-				document.getElementById("status").innerHTML = "invalid username/password";
+				var stat = JSON.parse(this.responseText).status
+				if(stat.indexOf('invalid')>=0){
+					document.getElementById("status").innerHTML = "invalid username/password";
+				}else{
+					document.getElementById("status").innerHTML = "Technical issue for validate username/password, Please try again later";
+				}
+				
 			}
 		}
 	};
-	xmlhttp.open("POST", "https://logintests.herokuapp.com/validateUser");
+	xmlhttp.open("POST", "http://localhost:3000/validateUser");
 	xmlhttp.setRequestHeader("Content-Type", "application/json");
-	xmlhttp.send(JSON.stringify({username:document.getElementById("uname").value,sess:session}));	
+	xmlhttp.send(JSON.stringify({username:document.getElementById("uname").value,passwd:document.getElementById("pwd").value,sess:session}));	
 }
 
 function validateOtp(phone) {		
@@ -212,7 +216,7 @@ function validateOtp(phone) {
       connection: 'sms',
       phoneNumber: '+'+phone,
       verificationCode: document.getElementById('otp').value
-    }, function (err,res) {
+    }, function (err,res) {	
 		if(err){
 			document.getElementById('status').innerHTML = 'Invalid OTP, Please enter valid one';
 			console.log(err);

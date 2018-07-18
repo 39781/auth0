@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+  <script src="//use.typekit.net/iws6ohy.js"></script>
+  <script>
+    try { Typekit.load(); } catch (e) { }
+  </script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- font awesome from BootstrapCDN -->
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="app.css" rel="stylesheet">
+
+  <script src="auth0-variables.js">
+
+  </script>
+</head>
+
+<body class="home">
+  <div class="container">
+    <div class="login-page clearfix">
+      <div class="login-box auth0-box before">
+        <img class="logo" src="https://i.cloudup.com/StzWWrY34s.png" />
+        <h3>Auth0 Passwordless Example</h3>
+        <p>Login with SMS</p>
+        <div class="alert alert-warning">
+          <p>
+              In your Client settings in the <a target="_blank" href="https://manage.auth0.com">Dashboard</a>,
+              add the following to the Allowed Origins (CORS) list in order for the one time code samples to work:
+          </p>
+          <p>
+              <strong><script type="text/javascript">document.write(location.origin)</script></strong>
+          </p>
+          <p>
+              You will also need to add the following to the Allowed Callback URLs list:
+          </p>
+          <p>
+            <strong><script type="text/javascript">document.write(location.href)</script></strong>
+          </p>
+        </div>
+        <button onclick="login()" class="btn btn-primary btn-lg btn-login btn-block">SignIn</button>
+      </div>
+      <div class="logged-in-box auth0-box logged-in" style="display: none;">
+        <h1 id="logo"><img src="auth0_logo_final_blue_RGB.png" /></h1>
+        <img class="avatar" />
+        <h2>Welcome <span class="nickname"></span></h2>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.auth0.com/js/lock/11.2/lock.min.js"></script>
+  <script>
+    var options = {
+      allowedConnections: ["sms"], //only needed if you have both email and sms enabled in the dashboard
+      auth: {
+        params: {
+          scope: "openid profile"
+        }
+      }
+    };
+    //AUTH0_CLIENT_ID and AUTH0_DOMAIN are defined in the auth0-variables.js file.
+    var lock = new Auth0LockPasswordless('hCg4mx_Cakni2wtASJnKpGcRntBH3ZjN', 'exeter.auth0.com', options);
+	lock.sms(function(error, profile, id_token, access_token, state, refresh_token) {
+	  if (!error) {
+		alert("User has logged in");
+	  }
+	});
+    function login() {  
+      lock.show();
+    }
+
+    $(function () {
+      lock.on("authenticated", function (authResult) {
+        $(".login-box").hide();
+        $(".logged-in-box").show();
+        lock.getUserInfo(authResult.accessToken, function (error, profile) {
+          if (error) {
+            console.log("err", error);
+            alert("There was an error retrieving your profile: " + error.message);
+          } else {
+            $(".nickname").text(profile.name);
+            $(".avatar").attr("src", profile.picture);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
