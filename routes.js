@@ -42,7 +42,7 @@ router.use('/auth0', jwtMiddleware({
 
 router.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
-    res.status(401).send('your are not authorized person to get information. please login get authorization');
+    res.status(401).send('your are not authorized person to get information. please login to get authorization');
   }
 });
 
