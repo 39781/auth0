@@ -46,7 +46,40 @@ router.use(function (err, req, res, next) {
   }
 });
 
-router.post('/auth0/callAPI', function(req,res){
+router.post('/auth0/psMicroService', function(req,res){
+	console.log(req.body);
+	request.get(req.body.api, {'json': true}, (err, httpResponse, body) => {
+		 if(err){
+			 console.log('err',err);
+			 res.json(err).end();
+		 }else{
+			 res.json(body).end();
+		 }		 
+	});
+});
+router.post('/auth0/wdMicroService', function(req,res){
+	console.log(req.body);
+	request.get(req.body.api, {'json': true}, (err, httpResponse, body) => {
+		 if(err){
+			 console.log('err',err);
+			 res.json(err).end();
+		 }else{
+			 res.json(body).end();
+		 }		 
+	});
+});
+router.post('/auth0/artMicroService', function(req,res){
+	console.log(req.body);
+	request.get(req.body.api, {'json': true}, (err, httpResponse, body) => {
+		 if(err){
+			 console.log('err',err);
+			 res.json(err).end();
+		 }else{
+			 res.json(body).end();
+		 }		 
+	});
+});
+router.post('/auth0/snowMicroService', function(req,res){
 	console.log(req.body);
 	request.get(req.body.api, {'json': true}, (err, httpResponse, body) => {
 		 if(err){
