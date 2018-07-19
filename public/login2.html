@@ -17,6 +17,7 @@ body {
 }
 </style>
 <body>
+<input type="hidden" id="errorTxt" value='User validated Sucessfully. close browser to continue google assistant'/>
 <div id="closeWin" onClick="window.close()"></div>
 <iframe src="" frameborder="0" class='frame' id='ifrm'></iframe>
 </body>
@@ -25,7 +26,7 @@ console.log(window.location.href);
 url = 'http://localhost:3000/login1.html?userId='+window.location.href.split('=')[1];
 document.getElementById('ifrm').src = url;
 window.onunload = function (e) {    		
-    opener.somefunction('User validated Sucessfully. close browser to continue google assistant');
+    opener.somefunction(document.getElementById('errorTxt').value);
 };
 </script>
 </html>

@@ -7,8 +7,7 @@ var path			= require("path");
 var url 			= require('url');	
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
-const Auth0TokenVerifier = require('./utilities/authTokenVerifier.js');
-const adAuthen		 = require('./utilities/adAthentication.js');
+const auth0		 = require('./utilities/auth0.js');
 const jwtMiddleware = require('express-jwt')
 var jwksClient 		= require('jwks-rsa');
 const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
@@ -115,11 +114,11 @@ router.post('/validateUser',function(req, res){
 			username : req.body.username,
 			password : req.body.passwd
 		};			
-	adAuthen.authenticateAD(adConfig)*/
+	auth0.authenticateAD(adConfig)*/
 	var adConfig = JSON.parse(JSON.stringify(config.adAuthObj));
 		adConfig['username'] = req.body.username;
 		adConfig['password'] = req.body.passwd;		
-	adAuthen.authenticateAuth0AD(adConfig,config.auth0ADlogin)
+	auth0.authenticateAuth0AD(adConfig,config.auth0ADlogin)
 	.then(function(result){
 		console.log('result',result);
 		if(!result){
@@ -147,11 +146,24 @@ router.get('/redirectUri',function(req,res){
 });
 
 
-router.post('/accessToken',function(req, res){
+router.post('/generateAccessToken',function(req, res){
 	console.log(req.body.url);
-	var params = url.parse(req.body.url, true).query;		
-	var redirectUrl='close'
-	if(params.sno==2){
+	var params = url.parse(req.body.url, true).query;
+	loggedUsers[params.userId] = params		
+	auth0.generateToken(config.microServicesApis.common, config.appDet.tokenEndPoint)
+	.then(function(result){
+		console.log(result);
+		loggedUsers[params.userId]['access_token'] = result.access_token;
+		res.status(200);
+		res.send('close');
+		res.end();
+	})
+	.catch(function(err){
+		res.status(400);
+		res.send("Authentication failed due to some technical issue. Try again later");
+		res.end();
+	});
+	/*if(params.sno==2){
 		loggedUsers[params.userId]['access_token'] = params.access_token;		
 		console.log(loggedUsers[params.userId]);
 		console.log('redirecurl',redirectUrl);
@@ -161,16 +173,20 @@ router.post('/accessToken',function(req, res){
 		res.json(redirectUrl).end();
 	}else{
 		loggedUsers[params.userId] = params	
+		
+		
 		redirectUrl = config.appDet.authorize+'?scope='+config.appDet.scope+'&audience='+config.appDet.audience+'&response_type='+config.appDet.responseType+'&client_id='+config.appDet.clientID+'&redirect_uri='+encodeURIComponent("http://localhost:3000/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&nonce='+params.access_token+'&prompt=none';
+		
 		console.log(redirectUrl);		
 		res.header('content-type','text/plain');
 		res.status(200);
 		res.send(redirectUrl);
 		res.end();
 	}
-	console.log(params);			
+	console.log(params);		
 			
-	//tokenVerifier(params.id_token,);*/	
+	//tokenVerifier(params.id_token,);
+	*/	
 })
 
 var testAccessTokenValidation = function(token, peopleSoftAPI){

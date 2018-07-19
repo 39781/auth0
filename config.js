@@ -1,4 +1,18 @@
 module.exports = {
+	microServicesApis:{
+		psMicroService:{
+			  "client_id":"6Wj4uUq00IpauFR02kyY9fehZIzzlKwL",
+			  "client_secret":"YL4Zezuum3Bo_E-5okTDAkRS0mAqGluDwqYIJNkN2IgdIIXcuuU2iu727RugFgc4",
+			  "audience":"http://localhost:3000/auth0/psMicroService/",
+			  "grant_type":"client_credentials"
+		},
+		common:{
+			"client_id":"hCg4mx_Cakni2wtASJnKpGcRntBH3ZjN",
+			"client_secret":"BHKd9RjFpywi67W_5LeX9hslKGlpnBh3zOhXE-CowRgIFQXB-ifgIQtnRlEBazlM",
+			"audience":"https://exeter.auth0.com/api/v2/",
+			"grant_type":"client_credentials"
+		}
+	},
 	auth0ADlogin:"https://exeter.auth0.com/usernamepassword/login",
 	adAuthObj:{
 		"client_id":"jH-1grnSlMloFGvd8-6l-oF9r0FQtdXZ",
@@ -30,6 +44,7 @@ module.exports = {
 		"domainName":"exeter.auth0.com",
 		"audience":'https://exeter.auth0.com/api/v2/',
 		"authorize":"https://exeter.auth0.com/authorize",
+		"tokenEndPoint":"https://exeter.auth0.com/oauth/token",
 		"responseType":'token id_token',
 		"scope":"profile",
 		"clientID":"hCg4mx_Cakni2wtASJnKpGcRntBH3ZjN",
