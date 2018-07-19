@@ -22,7 +22,7 @@ router.use('/auth0', jwtMiddleware({
 			jwksUri: config.appDet.jwksUri
 		  }), 
   getToken: function (req) {
-	  console.log(req.headers)
+	  console.log('headers',req.headers)
     if (req.headers.authorization){
 		var auth = req.headers.authorization.split(' ');
 		if(auth[0] === 'Bearer'){
@@ -47,13 +47,15 @@ router.use(function (err, req, res, next) {
 });
 
 router.post('/auth0/callAPI', function(req,res){
+	console.log(req.body);
 	request.get(req.body.api, {'json': true}, (err, httpResponse, body) => {
 		 if(err){
+			 console.log('err',err);
 			 res.json(err).end();
 		 }else{
 			 res.json(body).end();
 		 }		 
-	});	
+	});
 });
 
 
@@ -75,20 +77,25 @@ router.post('/botHandler',function(req, res){
 
 router.post('/validateUser',function(req, res){
 	var accDet = {};
-	var adConfig = JSON.parse(JSON.stringify(config.adCred));
+	/*var adConfig = JSON.parse(JSON.stringify(config.adCred));
 		adConfig['user'] ={
 			username : req.body.username,
 			password : req.body.passwd
 		};			
-	adAuthen.authenticateAD(adConfig)
+	adAuthen.authenticateAD(adConfig)*/
+	var adConfig = JSON.parse(JSON.stringify(config.adAuthObj));
+		adConfig['username'] = req.body.username;
+		adConfig['password'] = req.body.passwd;		
+	adAuthen.authenticateAuth0AD(adConfig,config.auth0ADlogin)
 	.then(function(result){
+		console.log('result',result);
 		if(!result){
 			res.status(400);
 			res.json({status:'invalid user'}).end();
 		}else{
 			accDet['domainName'] = config.appDet.domainName;
 			accDet['clientID'] = config.appDet.clientID,
-			accDet['phoneNumber'] = config.employees[req.body.username].ph;
+			accDet['phoneNumber'] = config.employees[req.body.username.toLowerCase()].ph;
 			accDet['redirectUri'] = config.appDet.redirectUri;
 			console.log({status:'valid user','accDet':accDet});
 			res.status(200);
@@ -96,6 +103,7 @@ router.post('/validateUser',function(req, res){
 		}
 	})
 	.catch(function(err){
+		console.log('err',err);
 		res.status(400);
 		res.json({status:'Technical Issue'}).end();
 	});	
