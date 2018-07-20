@@ -71,7 +71,7 @@ module.exports = {
 		"37086":{ph:"+917200050085",name:"B+Hari+Prasad%2c"},
 		"deb":{ph:"+917200050085",name:"B+Hari+Prasad%2c"}
 	},
-	apis:["http://ps92dmo.hexaware.com:8080/PSIGW/RESTListeningConnector/PSFT_HR/HX_LMS_BOT_ABS_DTLS_RST.v1/KU0097"],
+	apis:["https://logintests.herokuapp.com/test"],
 	"smsApi":"http://smsapi.24x7sms.com/api_2.0/SendSMS.aspx?APIKEY=ZY2nHm2RiIC&MobileNo=phonenumber&SenderID=TESTIN&Message=Dear+name+the+OTP+to+reset+your+password+is+Otpnumber%2c+valid+only+for+the+next+30++minutes.&ServiceName=TEMPLATE_BASED" 
 }
 

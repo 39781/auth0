@@ -222,17 +222,21 @@ var userCheck = function(agent){
 		}
 		textResp = 'You are not a authorized user, please login'
 	}else{
-		agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
+		/*agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
 			text:"Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
 			session:agent.request_.body.originalDetectIntentRequest.payload.user.userId
-		}});
-		/*agent.add(new Text({'text': 'Welcome to Hexa Hema!', 'ssml': "<speak>Hi<break time='5s'/>"+textResp+"</speak>"}));
+		}});*/
+		textResp = "Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.";
+		agent.add(new Text({'text': textResp, 'ssml': "<speak>Hi<break time='5s'/>"+textResp+"</speak>"}));
 		agent.add(new Card({
 			title: 'Login ',		
 			text: 'Please click login to get access me',
 			buttonText: 'Login', 
 			buttonUrl: 'https://logintests.herokuapp.com/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
-		}));*/
+		}));
+		setTimeout(function(){
+			agent.add(new Suggestion("Account Recovery"));
+		},5000);
 	}
 		
 }
