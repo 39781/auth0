@@ -12,11 +12,8 @@ const jwtMiddleware = require('express-jwt')
 var jwksClient 		= require('jwks-rsa');
 const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var sessID;
-var intentMap = new Map();	
-var intentsLen = config.intents.length;
-for(i=0;i<intentsLen;i++){
-	intentMap.set(config.intents[i],userCheck);
-}
+
+
 router.use('/auth0', jwtMiddleware({
   secret: jwksClient.expressJwtSecret({
 			cache: true,
@@ -101,6 +98,12 @@ router.post('/botHandler',function(req, res){
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);	
 	const agent = new WebhookClient({request: req, response: res});		
+	var intentMap = new Map();	
+	var intentsLen = config.intents.length;
+	for(i=0;i<intentsLen;i++){	
+		intentMap.set(config.intents[i],userCheck);
+	}
+	//console.log(intentMap);
 	agent.handleRequest(intentMap);	
 });	
 
