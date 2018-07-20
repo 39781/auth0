@@ -235,6 +235,7 @@ var userCheck = function(agent){
 			buttonUrl: 'https://logintests.herokuapp.com/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
 		}));
 		setTimeout(function(){
+			console.log('new resp added');
 			agent.add(new Suggestion("Account Recovery"));
 		},5000);
 	}
