@@ -237,7 +237,7 @@ var userCheck = function(agent){
 		setTimeout(function(){
 			console.log('new resp added');
 			agent.setFollowupEvent("gotoMenu");
-		},5000);
+		},3000);
 	}
 		
 }
