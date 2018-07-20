@@ -1,7 +1,10 @@
-var jwt 			= require('jsonwebtoken');
+var fs = require('fs');
 
- 
-// get the decoded payload and header
-var decoded = jwt.decode('GmSNvhxf4EIsB3Makfvy49ScVz0icVgJ', {complete: true});
-//console.log(decoded.header);
-console.log(decoded)
+fs.readdir('C:\\Users\\39781\\Downloads\\ESBot\\intents',function(err, files){
+	var l = files.length;
+	for(i=0;i<l;i++)
+	{
+		files[i] = files[i].replace('.json','');
+	}
+	console.log(JSON.stringify(files));
+});

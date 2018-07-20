@@ -12,7 +12,11 @@ const jwtMiddleware = require('express-jwt')
 var jwksClient 		= require('jwks-rsa');
 const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var sessID;
-
+var intentMap = new Map();	
+var intentsLen = config.intents.length;
+for(i=0;i<intentsLen;i++){
+	intentMap.set(config.intents[i],userCheck);
+}
 router.use('/auth0', jwtMiddleware({
   secret: jwksClient.expressJwtSecret({
 			cache: true,
@@ -96,14 +100,8 @@ router.post('/botHandler',function(req, res){
 	//console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);	
-	const agent = new WebhookClient({request: req, response: res});	
-	let intentMap = new Map();	
-	var intentsLen = config.intents.length;
-	for(i=0;i<intentsLen;i++){
-		intentMap.set(config.intents[i],userCheck);
-	}
-	agent.handleRequest(intentMap);
-	sessID = req.body.originalDetectIntentRequest.payload.conversation.conversationId;	
+	const agent = new WebhookClient({request: req, response: res});		
+	agent.handleRequest(intentMap);	
 });	
 
 
@@ -211,23 +209,29 @@ var userCheck = function(agent){
 			issuer:config.appDet.issuer,
 			audience:config.appDet.audience			
 		};
-		if(Auth0TokenVerifier.tokenVerifier(options)){		
-			agent.add(agent.consoleMessages); 
-			return
+		if(auth0.tokenVerifier(options)){
+			if(agent.request_.body.queryResult.action == 'input.welcome'){
+				agent.setFollowupEvent("gotoMenu");
+			}else{
+				agent.add(agent.consoleMessages); 
+			}							
+			return;
 		}
 		textResp = 'You are not a authorized user, please login'
 	}else{
-		textResp = 'Welcome to Hexa Hema!';
+		agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
+			text:"Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
+			session:agent.request_.body.originalDetectIntentRequest.payload.user.userId
+		}});
+		/*agent.add(new Text({'text': 'Welcome to Hexa Hema!', 'ssml': "<speak>Hi<break time='5s'/>"+textResp+"</speak>"}));
+		agent.add(new Card({
+			title: 'Login ',		
+			text: 'Please click login to get access me',
+			buttonText: 'Login', 
+			buttonUrl: 'http://localhost:3000/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
+		}));*/
 	}
-	agent.add(new Text({'text': textResp, 'ssml': "<speak>Hi<break time='5s'/>"+textResp+"</speak>"}));
-	agent.add(new Card({
-		title: 'Login ',		
-		text: 'Please click login to get access me',
-		buttonText: 'Login', 
-		buttonUrl: 'http://localhost:3000/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
-	}));
-	agent.add(new Suggestion('People Soft'));
-	agent.add(new Suggestion('Work Day'));
+		
 }
 
 
