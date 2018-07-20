@@ -10,9 +10,11 @@ const key			= require('./testBot.json');
 const auth0		 = require('./utilities/auth0.js');
 const jwtMiddleware = require('express-jwt')
 var jwksClient 		= require('jwks-rsa');
+const {dialogflow,Suggestions,SimpleResponse} = require('actions-on-google');
 const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var sessID;
 
+const apps = dialogflow({debug:true});
 
 router.use('/auth0', jwtMiddleware({
   secret: jwksClient.expressJwtSecret({
@@ -189,7 +191,7 @@ router.post('/generateAccessToken',function(req, res){
 	//tokenVerifier(params.id_token,);
 	*/	
 })
-
+//https://github.com/actions-on-google/dialogflow-facts-about-google-nodejs/blob/master/functions/index.js
 var testAccessTokenValidation = function(token, peopleSoftAPI){
 	request.post('https://logintests.herokuapp.com/auth0/callAPI', {
 		'auth': {
