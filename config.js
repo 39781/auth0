@@ -3,7 +3,7 @@ module.exports = {
 		psMicroService:{
 			  "client_id":"6Wj4uUq00IpauFR02kyY9fehZIzzlKwL",
 			  "client_secret":"YL4Zezuum3Bo_E-5okTDAkRS0mAqGluDwqYIJNkN2IgdIIXcuuU2iu727RugFgc4",
-			  "audience":"http://localhost:3000/auth0/psMicroService/",
+			  "audience":"https://logintests.herokuapp.com/auth0/psMicroService/",
 			  "grant_type":"client_credentials"
 		},
 		common:{
@@ -50,7 +50,7 @@ module.exports = {
 		"scope":"profile",
 		"clientID":"hCg4mx_Cakni2wtASJnKpGcRntBH3ZjN",
 		"clientSecret":"BHKd9RjFpywi67W_5LeX9hslKGlpnBh3zOhXE-CowRgIFQXB-ifgIQtnRlEBazlM",
-		"redirectUri":'http://localhost:3000/redirectUri',
+		"redirectUri":'https://logintests.herokuapp.com/redirectUri',
 		'issuer':'https://exeter.auth0.com/',
 		'jwksUri':'https://exeter.auth0.com/.well-known/jwks.json',
 		'alg':['RS256']

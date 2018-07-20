@@ -140,7 +140,7 @@ router.post('/validateUser',function(req, res){
 })
 
 router.get('/redirectUri',function(req,res){	
-	res.redirect('http://localhost:3000/redirectPage.html?sno='+req.query.sno+'&empId='+req.query.empId+'&userId='+req.query.userId);	
+	res.redirect('https://logintests.herokuapp.com/redirectPage.html?sno='+req.query.sno+'&empId='+req.query.empId+'&userId='+req.query.userId);	
 });
 
 
@@ -173,7 +173,7 @@ router.post('/generateAccessToken',function(req, res){
 		loggedUsers[params.userId] = params	
 		
 		
-		redirectUrl = config.appDet.authorize+'?scope='+config.appDet.scope+'&audience='+config.appDet.audience+'&response_type='+config.appDet.responseType+'&client_id='+config.appDet.clientID+'&redirect_uri='+encodeURIComponent("http://localhost:3000/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&nonce='+params.access_token+'&prompt=none';
+		redirectUrl = config.appDet.authorize+'?scope='+config.appDet.scope+'&audience='+config.appDet.audience+'&response_type='+config.appDet.responseType+'&client_id='+config.appDet.clientID+'&redirect_uri='+encodeURIComponent("https://logintests.herokuapp.com/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&nonce='+params.access_token+'&prompt=none';
 		
 		console.log(redirectUrl);		
 		res.header('content-type','text/plain');
@@ -188,7 +188,7 @@ router.post('/generateAccessToken',function(req, res){
 })
 
 var testAccessTokenValidation = function(token, peopleSoftAPI){
-	request.post('http://localhost:3000/auth0/callAPI', {
+	request.post('https://logintests.herokuapp.com/auth0/callAPI', {
 		'auth': {
 		  'bearer': token
 		 },
@@ -228,7 +228,7 @@ var userCheck = function(agent){
 			title: 'Login ',		
 			text: 'Please click login to get access me',
 			buttonText: 'Login', 
-			buttonUrl: 'http://localhost:3000/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
+			buttonUrl: 'https://logintests.herokuapp.com/login.html?userId='+agent.request_.body.originalDetectIntentRequest.payload.user.userId
 		}));*/
 	}
 		
