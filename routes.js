@@ -236,7 +236,7 @@ var userCheck = function(agent){
 		}));
 		setTimeout(function(){
 			console.log('new resp added');
-			agent.add(new Suggestion("Account Recovery"));
+			agent.setFollowupEvent("gotoMenu");
 		},5000);
 	}
 		
