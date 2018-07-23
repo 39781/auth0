@@ -167,20 +167,30 @@ var userCheck = function(agent){
 			issuer:config.appDet.issuer,
 			audience:config.appDet.audience			
 		};
-		if(auth0.tokenVerifier(options)){
-			switch(agent.request_.body.queryResult.action){
-				case 'input.welcome':actions.welcome(agent);break;
-				case 'input.verifyOtp':actions.verifyOtp(agent);break;
-				default:agent.add(agent.consoleMessages);
+		if(agent.request_.body.queryResult.action == 'input.verifyOtp'){
+			actions.verifyOtp(agent);
+		}else{
+			if(auth0.tokenVerifier(options)){
+				switch(agent.request_.body.queryResult.action){
+					case 'input.welcome':actions.welcome(agent);break;					
+					default:agent.add(agent.consoleMessages);
+				}
+			}else{
+				textResp = 'You are not a authorized user, please login';
+				agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
+					text:"You are not a authorized user, please login, Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
+					session:agent.request_.body.originalDetectIntentRequest.payload.user.userId
+				}});
 			}
+		}		
 			/*if(agent.request_.body.queryResult.action == 'input.welcome'){
 				agent.setFollowupEvent("gotoMenu");
 			}else{
 				agent.add(agent.consoleMessages); 
 			}*/							
-			return;
-		}
-		textResp = 'You are not a authorized user, please login'
+		return;
+		
+		
 	}else{
 		agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
 			text:"Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
