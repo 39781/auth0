@@ -117,4 +117,21 @@ var carouselSelect = function(listSel, payload){
 		}
 	}	
 }
+
+var basicCard = function(response,text, buttons){
+	return new Promise(function(resolve,reject){		
+		response.payload.google.richResponse.items.push(
+			{"basicCard": {
+			  "formattedText": text,			 
+			  "buttons": buttons,
+			   "image": {},
+			}		
+		});		
+	resolve(response);
+	});
+}
+var basicCard = function(basicCd, payload){
+	console.log(basicCd);
+//	payload.google.richResponse.items.push()
+}
  
