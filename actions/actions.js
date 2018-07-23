@@ -46,6 +46,7 @@ module.exports = {
 			if(message.BrowseCarousel){
 			}
 		});
+		console.log(JSON.stringify(payload));
 		agent.add(new Payload(agent.ACTIONS_ON_GOOGLE, payload));
 	}	
 }
