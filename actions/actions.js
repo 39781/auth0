@@ -68,13 +68,13 @@ var simpleResponses = function(simpleResponse, payload){
               "image": {}
             },*/
 var listSelect = function(listSel, payload){
-	var list = {
+	var lists = {
 		title : listSel.title,
 		items:[],
 	}
 	console.log('list',JSON.stringify(list));
 	listSel.items.forEach(function(list){		
-		list.items.push({
+		lists.items.push({
 			optionInfo:{
 				synonyms: list.info.synonyms,
 				title:list.info.title,
