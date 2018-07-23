@@ -172,6 +172,9 @@ function validateLogin() {
 			document.getElementById("status").innerHTML="";
 			var accDet = JSON.parse(this.responseText).accDet;	
 			console.log(accDet);
+			var respText = '<label for="uname"><b>OTP</b></label><span> has been sent to your mobile, please enter OTP in the required format [ ex: OTP - xxxxx ]</span><button type="button" onClick="window.close()">Continue</button>';
+			document.getElementById("containerBody").innerHTML = respText;
+			/*var respText = '<label for="psw"><b>Enter OTP</b></label><input type="password" placeholder="Password" id="otp" name="otp" required><button type="button" onClick="validateOtp('+accDet.phoneNumber+')">Login</button>';
 			webAuth = new auth0.WebAuth({
 				domain:       accDet.domainName,
 				clientID:     accDet.clientID,				
@@ -193,7 +196,7 @@ function validateLogin() {
 					document.getElementById("containerBody").innerHTML = respText;
 				  }					  					  
 				}
-			  );
+			  );*/
 			}else if(this.status == 400){
 				console.log('hari');
 				var stat = JSON.parse(this.responseText).status

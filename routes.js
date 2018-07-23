@@ -7,14 +7,13 @@ var path			= require("path");
 var url 			= require('url');	
 const {google}		= require('googleapis');
 const key			= require('./testBot.json');
-const auth0		 = require('./utilities/auth0.js');
+const auth0			= require('./utilities/auth0.js');
+const actions		= require('./actions/actions.js');
 const jwtMiddleware = require('express-jwt')
 var jwksClient 		= require('jwks-rsa');
 const {dialogflow,Suggestions,SimpleResponse} = require('actions-on-google');
-const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var sessID;
 
-const apps = dialogflow({debug:true});
 
 router.use('/auth0', jwtMiddleware({
   secret: jwksClient.expressJwtSecret({
@@ -106,13 +105,7 @@ router.post('/botHandler',function(req, res){
 		intentMap.set(config.intents[i],userCheck);
 	}
 	//console.log(intentMap);
-	agent.handleRequest(intentMap);	
-	apps.intent('Default Welcome Intent',(conv)=>{
-		conv.ask(new SimpleResponse({
-			speech: 'test',
-			text: 'test',
-	  }));
-	})
+	agent.handleRequest(intentMap);		
 });	
 
 
@@ -134,13 +127,26 @@ router.post('/validateUser',function(req, res){
 			res.status(400);
 			res.json({status:'invalid user'}).end();
 		}else{
-			accDet['domainName'] = config.appDet.domainName;
+			var smsApi = config.smsApi.replace('phonenumber',config.employees[req.body.username].ph);	
+			smsApi = smsApi.replace('Otpnumber',45627);
+			smsApi = smsApi.replace('name',config.employees[req.body.username].name);
+			loggedUsers[req.body.sess] = {
+				otp:45627,
+				access_token:''
+			};
+			console.log(smsApi,config.employees[req.body.username].ph);
+			request(smsApi,function(error,response,body){
+				console.log('error',error,'body',body);
+				res.status(200);
+				res.json({status:true}).end();
+			});
+			/*accDet['domainName'] = config.appDet.domainName;
 			accDet['clientID'] = config.appDet.clientID,
 			accDet['phoneNumber'] = config.employees[req.body.username.toLowerCase()].ph;
 			accDet['redirectUri'] = config.appDet.redirectUri;
-			console.log({status:'valid user','accDet':accDet});
-			res.status(200);
-			res.json({status:'valid user','accDet':accDet}).end();
+			console.log({status:'valid user','accDet':accDet});*/
+			//res.status(200);
+			//res.json({status:'valid user','accDet':accDet}).end();
 		}
 	})
 	.catch(function(err){
@@ -150,6 +156,42 @@ router.post('/validateUser',function(req, res){
 	});	
 })
 
+var userCheck = function(agent){		
+	console.log(JSON.stringify(agent.request_.body));
+	var uid = agent.request_.body.originalDetectIntentRequest.payload.user.userId;
+	if(typeof(loggedUsers[uid])!='undefined'){
+		var options = {
+			idToken:loggedUsers[uid].id_token,
+			issuer:config.appDet.issuer,
+			audience:config.appDet.audience			
+		};
+		if(auth0.tokenVerifier(options)){
+			switch(agent.request_.body.queryResult.action){
+				case 'input.welcome':actions.welcome(agent);break;
+				case 'input.verifyOtp':actions.verifyOtp(agent);break;
+				default:agent.add(agent.consoleMessages);
+			}
+			/*if(agent.request_.body.queryResult.action == 'input.welcome'){
+				agent.setFollowupEvent("gotoMenu");
+			}else{
+				agent.add(agent.consoleMessages); 
+			}*/							
+			return;
+		}
+		textResp = 'You are not a authorized user, please login'
+	}else{
+		agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
+			text:"Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
+			session:agent.request_.body.originalDetectIntentRequest.payload.user.userId
+		}});				
+	}
+		
+}
+
+
+
+
+/*
 router.get('/redirectUri',function(req,res){	
 	res.redirect('https://logintests.herokuapp.com/redirectPage.html?sno='+req.query.sno+'&empId='+req.query.empId+'&userId='+req.query.userId);	
 });
@@ -195,7 +237,7 @@ router.post('/generateAccessToken',function(req, res){
 	console.log(params);		
 			
 	//tokenVerifier(params.id_token,);
-	*/	
+	
 })
 //https://github.com/actions-on-google/dialogflow-facts-about-google-nodejs/blob/master/functions/index.js
 var testAccessTokenValidation = function(token, peopleSoftAPI){
@@ -209,38 +251,7 @@ var testAccessTokenValidation = function(token, peopleSoftAPI){
 		  console.log(err,body);
 		 console.log(httpResponse.statusCode + ': ' + httpResponse.statusMessage);
 	});
-}
-
-var userCheck = function(agent){		
-	console.log(JSON.stringify(agent.request_.body));
-	var uid = agent.request_.body.originalDetectIntentRequest.payload.user.userId;
-	if(typeof(loggedUsers[uid])!='undefined'){
-		var options = {
-			idToken:loggedUsers[uid].id_token,
-			issuer:config.appDet.issuer,
-			audience:config.appDet.audience			
-		};
-		if(auth0.tokenVerifier(options)){
-			if(agent.request_.body.queryResult.action == 'input.welcome'){
-				agent.setFollowupEvent("gotoMenu");
-			}else{
-				agent.add(agent.consoleMessages); 
-			}							
-			return;
-		}
-		textResp = 'You are not a authorized user, please login'
-	}else{
-		agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
-			text:"Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
-			session:agent.request_.body.originalDetectIntentRequest.payload.user.userId
-		}});				
-	}
-		
-}
-
-
-
-
+}*/
 
 
 /*function sendConfirmation(session){
