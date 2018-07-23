@@ -132,9 +132,12 @@ router.post('/botHandler',function(req, res){
 	
 	userCheck(req.body)
 	.then(function(resp){
+		console.log(resp);
+		res.status(200);
 		res.json(resp).end();
 	})
 	.catch(function(err){
+		res.status(400);
 		res.json(err).end();
 	})
 		
