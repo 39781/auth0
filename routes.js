@@ -166,7 +166,8 @@ var userCheck = function(agent){
 		var options = {
 			idToken:loggedUsers[uid].access_token,
 			issuer:config.appDet.issuer,
-			audience:config.appDet.audience			
+			audience:config.appDet.audience,
+			jwksUri:config.appDet.jwksUri
 		};
 		
 		if(auth0.tokenVerifier(options)){
