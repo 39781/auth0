@@ -107,6 +107,12 @@ router.post('/botHandler',function(req, res){
 	}
 	//console.log(intentMap);
 	agent.handleRequest(intentMap);	
+	apps.intent('Default Welcome Intent',(conv)=>{
+		conv.ask(new SimpleResponse({
+			speech: 'test',
+			text: 'test',
+	  }));
+	})
 });	
 
 
