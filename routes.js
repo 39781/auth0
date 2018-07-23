@@ -12,7 +12,7 @@ const actions		= require('./actions/actions.js');
 const jwtMiddleware = require('express-jwt')
 var jwksClient 		= require('jwks-rsa');
 //const {dialogflow,Suggestions,SimpleResponse} = require('actions-on-google');
-const {WebhookClient, Text, Card, Image, Suggestion, Payload} = require('dialogflow-fulfillment');
+const {WebhookClient, Text, Card, Image, Suggestion, Payload, List} = require('dialogflow-fulfillment');
 var sessID;
 
 
