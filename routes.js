@@ -102,9 +102,10 @@ router.post('/botHandler',function(req, res){
 	const agent = new WebhookClient({request: req, response: res});		
 	var intentMap = new Map();	
 	var intentsLen = config.intents.length;
-	for(i=0;i<intentsLen;i++){	
+	for(i=0;i<intentsLen;i++){			
 		intentMap.set(config.intents[i],userCheck);
 	}
+		intentMap.set('verify-OTP',actions.verifyOtp);
 	//console.log(intentMap);
 	agent.handleRequest(intentMap);		
 });	
@@ -167,28 +168,25 @@ var userCheck = function(agent){
 			issuer:config.appDet.issuer,
 			audience:config.appDet.audience			
 		};
-		if(agent.request_.body.queryResult.action == 'input.verifyOtp'){
-			actions.verifyOtp(agent);
-		}else{
-			if(auth0.tokenVerifier(options)){
-				switch(agent.request_.body.queryResult.action){
-					case 'input.welcome':actions.welcome(agent);break;					
-					default:agent.add(agent.consoleMessages);
-				}
-			}else{
-				textResp = 'You are not a authorized user, please login';
-				agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
-					text:"You are not a authorized user, please login, Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
-					session:agent.request_.body.originalDetectIntentRequest.payload.user.userId
-				}});
+		
+		if(auth0.tokenVerifier(options)){
+			switch(agent.request_.body.queryResult.action){
+				case 'input.welcome':actions.welcome(agent);break;					
+				default:agent.add(agent.consoleMessages);
 			}
+		}else{
+			textResp = 'You are not a authorized user, please login';
+			agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
+				text:"You are not a authorized user, please login, Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
+				session:agent.request_.body.originalDetectIntentRequest.payload.user.userId
+			}});
 		}		
-			/*if(agent.request_.body.queryResult.action == 'input.welcome'){
-				agent.setFollowupEvent("gotoMenu");
-			}else{
-				agent.add(agent.consoleMessages); 
-			}*/							
-		return;
+		/*if(agent.request_.body.queryResult.action == 'input.welcome'){
+			agent.setFollowupEvent("gotoMenu");
+		}else{
+			agent.add(agent.consoleMessages); 
+		}*/							
+		//return;
 		
 		
 	}else{
