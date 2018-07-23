@@ -5,7 +5,7 @@ module.exports = {
 		agent.setFollowupEvent("gotoMenu");
 	},
 	verifyOtp:function(agent){
-		console.log(req.originalDetectIntentRequest.payload.conversation.conversationId);
+		//console.log(req.originalDetectIntentRequest.payload.conversation.conversationId);
 		//console.log(JSON.stringify(Otps));
 		console.log(agent.request_.body.queryResult.parameters.otp);
 		if(loggedUsers[agent.request_.body.originalDetectIntentRequest.payload.user.userId].otp == agent.request_.body.queryResult.parameters.otp){					
