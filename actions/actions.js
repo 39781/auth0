@@ -70,22 +70,19 @@ var simpleResponses = function(simpleResponse, payload){
 var listSelect = function(listSel, payload){
 	var list = {
 		title : listSel.title,
-		items:listSel.items,
+		items:[],
 	}
 	console.log('list',JSON.stringify(list));
-	/*listSel.items.forEach(function(list){
-		if(typeof items[list.info.key] == 'undefined'){
-			items[list.info.key] = [];
-		}
-		items[list.info.key] = {
+	listSel.items.forEach(function(list){		
+		list.items.push({
 			optionInfo:{
 				synonyms: list.info.synonyms,
 				title:list.info.title,
 				description:list.info.description,
-				image:new Image(list.into.image)
+				//image:new Image(list.into.image)
 			}
-		}
-	})*/
+		})
+	})
 	payload.google.systemIntent = {
 		"intent": "actions.intent.OPTION",
 		"data": {
