@@ -17,7 +17,7 @@ var sessID;
 
 
 
-router.use(function(req, res, next){
+router.use('/auth0/psMicroService',function(req, res, next){
 	var client = jwksClient({
 		jwksUri: config.appDet.jwksUri
 	});
