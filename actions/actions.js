@@ -32,6 +32,9 @@ module.exports = {
 			if(message.simpleResponses){
 				simpleResponses(message.simpleResponses.simpleResponses,payload);
 			}
+			if(message.suggestions){
+				suggestions(message.suggestions.suggestions, payload);
+			}
 			if(message.listSelect){
 				listSelect(message.listSelect, payload);
 			}
@@ -66,9 +69,10 @@ var simpleResponses = function(simpleResponse, payload){
 var listSelect = function(listSel, payload){
 	var list = {
 		title : listSel.title,
-		items:{},
+		items:listSel.items,
 	}
-	listSel.forEach(function(list){
+	console.log('list',JSON.stringify(list));
+	/*listSel.items.forEach(function(list){
 		if(typeof items[list.info.key] == 'undefined'){
 			items[list.info.key] = [];
 		}
@@ -80,7 +84,7 @@ var listSelect = function(listSel, payload){
 				image:new Image(list.into.image)
 			}
 		}
-	})
+	})*/
 	payload.google.systemIntent = {
 		"intent": "actions.intent.OPTION",
 		"data": {
@@ -90,7 +94,7 @@ var listSelect = function(listSel, payload){
 	}	
 }
 var suggestions = function(sugges, payload){
-	
+	payload.google.richResponse.suggestions = sugges;
 }
 var carouselSelect = function(listSel, payload){
 	var list = {
