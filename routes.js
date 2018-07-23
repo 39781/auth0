@@ -16,7 +16,37 @@ const {WebhookClient, Text, Card, Image, Suggestion, Payload, List} = require('d
 var sessID;
 
 
-router.use('/auth0', jwtMiddleware({
+
+router.use(function(req, res, next){
+	var client = jwksClient({
+		jwksUri: config.appDet.jwksUri
+	});
+	function getKey(header, callback){
+	  client.getSigningKey(header.kid, function(err, key) {
+		var signingKey = key.publicKey || key.rsaPublicKey;
+		callback(null, signingKey);
+	  });
+	}
+	if (req.headers.authorization){
+		var auth = req.headers.authorization.split(' ');
+		if(auth[0] === 'Bearer'){
+			return jwt.verify(auth[1], getKey, {algorithms:config.appDet.alg,issuer:config.appDet.issuer,audience:req.session.audience}, function(err, decoded) {
+				if(err){
+					const err = new Error('Not Found');
+					err.status = 404;
+					next(err);
+				}else{
+					next();
+				}			
+			});
+		}else{
+			const err = new Error('Not Found');
+			err.status = 404;
+			next(err);
+		}			
+    } 
+});
+/*router.use('/auth0/psMicroService', jwtMiddleware({
   secret: jwksClient.expressJwtSecret({
 			cache: true,
 			rateLimit: true,
@@ -40,7 +70,7 @@ router.use('/auth0', jwtMiddleware({
     }    
     return null; 
   }
-}));
+}));*/
 
 router.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
@@ -131,7 +161,7 @@ router.post('/validateUser',function(req, res){
 			res.status(400);
 			res.json({status:'invalid user'}).end();
 		}else{
-			var uname = req.body.username.toLowerCase();
+			/*var uname = req.body.username.toLowerCase();
 			var smsApi = config.smsApi.replace('phonenumber',config.employees[uname].ph);	
 			smsApi = smsApi.replace('Otpnumber',45627);
 			smsApi = smsApi.replace('name',config.employees[uname].name);
@@ -144,14 +174,14 @@ router.post('/validateUser',function(req, res){
 				console.log('error',error,'body',body);
 				res.status(200);
 				res.json({status:true}).end();
-			});
-			/*accDet['domainName'] = config.appDet.domainName;
+			});*/
+			accDet['domainName'] = config.appDet.domainName;
 			accDet['clientID'] = config.appDet.clientID,
 			accDet['phoneNumber'] = config.employees[req.body.username.toLowerCase()].ph;
 			accDet['redirectUri'] = config.appDet.redirectUri;
-			console.log({status:'valid user','accDet':accDet});*/
-			//res.status(200);
-			//res.json({status:'valid user','accDet':accDet}).end();
+			console.log({status:'valid user','accDet':accDet});
+			res.status(200);
+			res.json({status:'valid user','accDet':accDet}).end();
 		}
 	})
 	.catch(function(err){
@@ -223,7 +253,7 @@ var userCheck = function(requ){
 
 
 
-/*
+
 router.get('/redirectUri',function(req,res){	
 	res.redirect('https://logintests.herokuapp.com/redirectPage.html?sno='+req.query.sno+'&empId='+req.query.empId+'&userId='+req.query.userId);	
 });
@@ -233,7 +263,7 @@ router.post('/generateAccessToken',function(req, res){
 	console.log(req.body.url);
 	var params = url.parse(req.body.url, true).query;
 	loggedUsers[params.userId] = params		
-	auth0.generateToken(config.microServicesApis.common, config.appDet.tokenEndPoint)
+	/*auth0.generateToken(config.microServicesApis.common, config.appDet.tokenEndPoint)
 	.then(function(result){
 		console.log(result);
 		loggedUsers[params.userId]['access_token'] = result.access_token;
@@ -245,8 +275,8 @@ router.post('/generateAccessToken',function(req, res){
 		res.status(400);
 		res.send("Authentication failed due to some technical issue. Try again later");
 		res.end();
-	});
-	/*if(params.sno==2){
+	});*/
+	if(params.sno==2){
 		loggedUsers[params.userId]['access_token'] = params.access_token;		
 		console.log(loggedUsers[params.userId]);
 		console.log('redirecurl',redirectUrl);
@@ -256,8 +286,7 @@ router.post('/generateAccessToken',function(req, res){
 		res.json(redirectUrl).end();
 	}else{
 		loggedUsers[params.userId] = params	
-		
-		
+
 		redirectUrl = config.appDet.authorize+'?scope='+config.appDet.scope+'&audience='+config.appDet.audience+'&response_type='+config.appDet.responseType+'&client_id='+config.appDet.clientID+'&redirect_uri='+encodeURIComponent("https://logintests.herokuapp.com/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&nonce='+params.access_token+'&prompt=none';
 		
 		console.log(redirectUrl);		
@@ -273,7 +302,7 @@ router.post('/generateAccessToken',function(req, res){
 })
 //https://github.com/actions-on-google/dialogflow-facts-about-google-nodejs/blob/master/functions/index.js
 var testAccessTokenValidation = function(token, peopleSoftAPI){
-	request.post('https://logintests.herokuapp.com/auth0/callAPI', {
+	request.post('https://logintests.herokuapp.com/auth0/psMicroService', {
 		'auth': {
 		  'bearer': token
 		 },
@@ -283,7 +312,7 @@ var testAccessTokenValidation = function(token, peopleSoftAPI){
 		  console.log(err,body);
 		 console.log(httpResponse.statusCode + ': ' + httpResponse.statusMessage);
 	});
-}*/
+}
 
 
 /*function sendConfirmation(session){
