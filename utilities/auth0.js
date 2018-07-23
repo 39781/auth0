@@ -102,7 +102,7 @@ module.exports = {
 			callback(null, signingKey);
 		  });
 		}
-		jwt.verify(idToken, getKey, {algorithms:params.alg,issuer:params.issuer,audience:params.audience}, function(err, decoded) {
+		jwt.verify(params.idToken, getKey, {algorithms:params.alg,issuer:params.issuer,audience:params.audience}, function(err, decoded) {
 			if(err){
 				console.log(err);
 				return false;

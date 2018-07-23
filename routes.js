@@ -161,7 +161,7 @@ var userCheck = function(agent){
 	var uid = agent.request_.body.originalDetectIntentRequest.payload.user.userId;
 	if(typeof(loggedUsers[uid])!='undefined'){
 		var options = {
-			idToken:loggedUsers[uid].id_token,
+			idToken:loggedUsers[uid].access_token,
 			issuer:config.appDet.issuer,
 			audience:config.appDet.audience			
 		};
