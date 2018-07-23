@@ -89,7 +89,9 @@ var listSelect = function(listSel, payload){
 		}
 	}	
 }
-
+var suggestions = function(sugges, payload){
+	
+}
 var carouselSelect = function(listSel, payload){
 	var list = {
 		title : listSel.title,
