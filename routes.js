@@ -173,7 +173,7 @@ var userCheck = function(agent){
 		.then(function(result){
 			console.log(result);
 			console.log(agent.request_.body.queryResult.action);
-			console.log(agent.request_.body.queryResult.fulfillmentMessages,agent,agent.consoleMessages);
+			console.log(agent.request_.body.queryResult.fulfillmentMessages,agent.consoleMessages);
 			switch(agent.request_.body.queryResult.action){
 				case 'input.welcome':actions.welcome(agent);break;					
 				default:agent.add(agent.consoleMessages);
