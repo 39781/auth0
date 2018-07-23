@@ -45,7 +45,7 @@ module.exports = {
 	}	
 }
 
-var simpleResponses = function(simpleRessponse, agent){
+var simpleResponses = function(simpleResponse, agent){
 	simpleResponse.forEach(function(simpleRes){
 		agent.add(new Text({'ssml':simpleRes.textToSpeach,'text':simpleRes.textToSpeach}));
 	})
