@@ -99,17 +99,15 @@ router.post('/botHandler',function(req, res){
 	//console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);	
-	if(actionName == 'verify-OTP'){
-		res.json(verify-OTP(req.body)).end();
-	}else{
-		userCheck(req.body)
-		.then(function(resp){
-			res.json(resp).end();
-		})
-		.catch(function(err){
-			res.json(err).end();
-		})
-	}	
+	const agent = new WebhookClient({request: req, response: res});		
+	var intentMap = new Map();	
+	var intentsLen = config.intents.length;
+	for(i=0;i<intentsLen;i++){			
+		intentMap.set(config.intents[i],userCheck);
+	}
+		intentMap.set('verify-OTP',actions.verifyOtp);
+	//console.log(intentMap);
+	agent.handleRequest(intentMap);		
 });	
 
 
@@ -161,63 +159,51 @@ router.post('/validateUser',function(req, res){
 	});	
 })
 
-var userCheck = function(requ){	
-	return new promise(function(resolve, reject){
-		console.log(JSON.stringify(requ));
-		var uid = requ.originalDetectIntentRequest.payload.user.userId;
-		if(typeof(loggedUsers[uid])!='undefined'){
-			var options = {
-				idToken:loggedUsers[uid].access_token,
-				issuer:config.appDet.issuer,
-				audience:config.appDet.audience,
-				jwksUri:config.appDet.jwksUri
-			};
-			return auth0.tokenVerifier(options)
-			.then(function(result){
-				console.log(result);
-				console.log(requ.queryResult.action);
-				console.log(JSON.stringify(requ.queryResult.fulfillmentMessages));
-				switch(requ.queryResult.action){
-					case 'input.welcome':resolve(actions.gotoMenu());break;					
-					default : resolve(actions.sendResponses(requ.queryResult.fulfillmentMessages));break;
-					//default:agent.add(agent.consoleMessages);
-				}
-			})
-			.catch(function(err){
-				console.log(err);								
-				reject({
-					"fulfillmentText": '',
-					"followupEventInput":{
-						"name": "mainMenu", 
-						"parameters" : { 
-							text:"You are not a authorized user, please login, Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
-							session:requ.originalDetectIntentRequest.payload.user.userId
-						},					
-					}
-				});
-			})
-				
-			/*if(requ.queryResult.action == 'input.welcome'){
-				agent.setFollowupEvent("gotoMenu");
-			}else{
-				agent.add(agent.consoleMessages); 
-			}*/							
-			//return;
+var userCheck = function(agent){		
+	console.log(JSON.stringify(agent.request_.body));
+	var uid = agent.request_.body.originalDetectIntentRequest.payload.user.userId;
+	if(typeof(loggedUsers[uid])!='undefined'){
+		var options = {
+			idToken:loggedUsers[uid].access_token,
+			issuer:config.appDet.issuer,
+			audience:config.appDet.audience,
+			jwksUri:config.appDet.jwksUri
+		};
+		return auth0.tokenVerifier(options)
+		.then(function(result){
+			console.log(result);
+			console.log(agent.request_.body.queryResult.action);
+			console.log(JSON.stringify(agent.request_.body.queryResult.fulfillmentMessages));
+			switch(agent.request_.body.queryResult.action){
+				case 'input.welcome':actions.welcome(agent);break;					
+				default : actions.sendResponses(agent, agent.request_.body.queryResult.fulfillmentMessages);break;
+				//default:agent.add(agent.consoleMessages);
+			}
+		})
+		.catch(function(err){
+			console.log(err);
+			textResp = 'You are not a authorized user, please login';
+			agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
+				text:"You are not a authorized user, please login, Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
+				session:agent.request_.body.originalDetectIntentRequest.payload.user.userId
+			}});
+		})
 			
-			
+		/*if(agent.request_.body.queryResult.action == 'input.welcome'){
+			agent.setFollowupEvent("gotoMenu");
 		}else{
-			resolve({
-				"fulfillmentText": '',
-				"followupEventInput":{
-					"name": "mainMenu", 
-					"parameters" : { 
-						text:"Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
-						session:requ.originalDetectIntentRequest.payload.user.userId
-					}
-				}
-			});			
-		}
-	})
+			agent.add(agent.consoleMessages); 
+		}*/							
+		//return;
+		
+		
+	}else{
+		agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
+			text:"Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
+			session:agent.request_.body.originalDetectIntentRequest.payload.user.userId
+		}});				
+	}
+		
 }
 
 
