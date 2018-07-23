@@ -7,8 +7,8 @@ module.exports = {
 	verifyOtp:function(agent){
 		console.log(req.originalDetectIntentRequest.payload.conversation.conversationId);
 		//console.log(JSON.stringify(Otps));
-		console.log(req.queryResult.parameters.otp);
-		if(loggedUsers[agent.request_.body.originalDetectIntentRequest.payload.user.userId].otp == req.queryResult.parameters.otp){					
+		console.log(agent.request_.body.queryResult.parameters.otp);
+		if(loggedUsers[agent.request_.body.originalDetectIntentRequest.payload.user.userId].otp == agent.request_.body.queryResult.parameters.otp){					
 			auth0.generateToken(config.microServicesApis.common, config.appDet.tokenEndPoint)
 			.then(function(result){
 				console.log(result);
