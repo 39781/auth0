@@ -129,17 +129,15 @@ router.post('/botHandler',function(req, res){
 	//console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);	
-	if(actionName == 'input.verifyOtp'){
-		res.json(verifyOtp(req.body)).end();
-	}else{
-		userCheck(req.body)
-		.then(function(resp){
-			res.json(resp).end();
-		})
-		.catch(function(err){
-			res.json(err).end();
-		})
-	}	
+	
+	userCheck(req.body)
+	.then(function(resp){
+		res.json(resp).end();
+	})
+	.catch(function(err){
+		res.json(err).end();
+	})
+		
 });	
 
 
