@@ -1,5 +1,6 @@
 const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var auth0 = require('./../utilities/auth0.js');
+var config = require('./../config.js');
 module.exports = {
 	welcome:function(agent){
 		agent.setFollowupEvent("gotoMenu");
