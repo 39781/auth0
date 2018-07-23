@@ -1,7 +1,7 @@
-const { WebhookClient, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
+const { WebhookClient, Text, Card, Payload, Suggestion } = require('dialogflow-fulfillment');
 var auth0 = require('./../utilities/auth0.js');
 var config = require('./../config.js');
-var {Text,Carousel, List,BrowseCarousel, Suggestions} = require('actions-on-google');
+
 module.exports = {
 	welcome:function(agent){
 		agent.setFollowupEvent("gotoMenu");
@@ -27,28 +27,30 @@ module.exports = {
 		}
 	},
 	sendResponses:function(agent, messages){
+		var payload = JSON.parse(JSON.stringify(config.responseObj.payload));
 		messages.forEach(function(message){
 			if(message.simpleResponses){
-				simpleResponses(message.simpleResponses.simpleResponses,agent);
+				simpleResponses(message.simpleResponses.simpleResponses,payload);
 			}
 			if(message.listSelect){
-				listSelect(message.listSelect, agent);
+				listSelect(message.listSelect, payload);
 			}
 			if(message.basicCard){
-				basicCard(message.basicCard, agent);
+				basicCard(message.basicCard, payload);
 			}
 			if(message.Carousel){
 			}
 			if(message.BrowseCarousel){
 			}
-		})
+		});
+		agent.add(new Payload(agent.ACTIONS_ON_GOOGLE, payload));
 	}	
 }
 
-var simpleResponses = function(simpleResponse, agent){
+var simpleResponses = function(simpleResponse, payload){
 	simpleResponse.forEach(function(simpleRes){
-		agent.add(new Text({'ssml':simpleRes.textToSpeach,'text':simpleRes.textToSpeach}));
-	})
+		payload.google.richResponse.items.push({simpleResponse:simpleRes});
+	});	
 }
 /*{
               "info": {
@@ -61,7 +63,34 @@ var simpleResponses = function(simpleResponse, agent){
               "description": "for Leave management, Employee Search",
               "image": {}
             },*/
-var listSelect = function(listSel, agent){
+var listSelect = function(listSel, payload){
+	var list = {
+		title : listSel.title,
+		items:{},
+	}
+	listSel.forEach(function(list){
+		if(typeof items[list.info.key] == 'undefined'){
+			items[list.info.key] = [];
+		}
+		items[list.info.key] = {
+			optionInfo:{
+				synonyms: list.info.synonyms,
+				title:list.info.title,
+				description:list.info.description,
+				image:new Image(list.into.image)
+			}
+		}
+	})
+	payload.google.systemIntent = {
+		"intent": "actions.intent.OPTION",
+		"data": {
+			"@type": "type.googleapis.com/google.actions.v2.OptionValueSpec",
+			"listSelect": list
+		}
+	}	
+}
+
+var carouselSelect = function(listSel, payload){
 	var list = {
 		title : listSel.title,
 		items:{},
@@ -77,6 +106,15 @@ var listSelect = function(listSel, agent){
 			image:new Image(list.into.image)
 		}
 	})
-	agent.add(new List(list));
+	payload.google.systemIntent = {
+		"intent": "actions.intent.OPTION",
+		"data": {
+			"@type": "type.googleapis.com/google.actions.v2.OptionValueSpec",
+			"carouselSelect": {
+			  "title": text,
+			  "items": items
+			}
+		}
+	}	
 }
  
