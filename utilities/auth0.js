@@ -93,6 +93,7 @@ module.exports = {
 		});
 	},
 	tokenVerifier:function (params){
+		console.log(params);
 		var client = jwksClient({
 			jwksUri: params.jwksUri
 		});
