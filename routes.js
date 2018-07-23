@@ -99,8 +99,8 @@ router.post('/botHandler',function(req, res){
 	//console.log(JSON.stringify(req.body));
 	var actionName = req.body.queryResult.action;	
 	console.log(actionName);	
-	if(actionName == 'verify-OTP'){
-		res.json(verify-OTP(req.body)).end();
+	if(actionName == 'input.verifyOtp'){
+		res.json(verifyOtp(req.body)).end();
 	}else{
 		userCheck(req.body)
 		.then(function(resp){
