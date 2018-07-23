@@ -171,11 +171,13 @@ var userCheck = function(agent){
 		};
 		
 		if(auth0.tokenVerifier(options)){
+			console.log('true');
 			switch(agent.request_.body.queryResult.action){
 				case 'input.welcome':actions.welcome(agent);break;					
 				default:agent.add(agent.consoleMessages);
 			}
 		}else{
+			console.log('false');
 			textResp = 'You are not a authorized user, please login';
 			agent.setFollowupEvent({ "name": "mainMenu", "parameters" : { 
 				text:"You are not a authorized user, please login, Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.",
