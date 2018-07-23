@@ -169,9 +169,11 @@ var userCheck = function(agent){
 			audience:config.appDet.audience,
 			jwksUri:config.appDet.jwksUri
 		};
-		auth0.tokenVerifier(options)
+		return auth0.tokenVerifier(options)
 		.then(function(result){
 			console.log(result);
+			console.log(agent.request_.body.queryResult.action);
+			console.log(agent.consoleMessages);
 			switch(agent.request_.body.queryResult.action){
 				case 'input.welcome':actions.welcome(agent);break;					
 				default:agent.add(agent.consoleMessages);
