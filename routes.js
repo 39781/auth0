@@ -176,7 +176,7 @@ var userCheck = function(agent){
 			console.log(agent.request_.body.queryResult.fulfillmentMessages,agent.consoleMessages);
 			switch(agent.request_.body.queryResult.action){
 				case 'input.welcome':actions.welcome(agent);break;					
-				default : actions.sendResponses(agent.request_.body.queryResult.fulfillmentMessages, agent);break;
+				default : actions.sendResponses(agent, agent.request_.body.queryResult.fulfillmentMessages);break;
 				//default:agent.add(agent.consoleMessages);
 			}
 		})
