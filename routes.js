@@ -128,14 +128,15 @@ router.post('/validateUser',function(req, res){
 			res.status(400);
 			res.json({status:'invalid user'}).end();
 		}else{
-			var smsApi = config.smsApi.replace('phonenumber',config.employees[req.body.username].ph);	
+			var uname = req.body.username.toLowerCase();
+			var smsApi = config.smsApi.replace('phonenumber',config.employees[uname].ph);	
 			smsApi = smsApi.replace('Otpnumber',45627);
-			smsApi = smsApi.replace('name',config.employees[req.body.username].name);
+			smsApi = smsApi.replace('name',config.employees[uname].name);
 			loggedUsers[req.body.sess] = {
 				otp:45627,
 				access_token:''
 			};
-			console.log(smsApi,config.employees[req.body.username].ph);
+			console.log(smsApi,config.employees[uname].ph);
 			request(smsApi,function(error,response,body){
 				console.log('error',error,'body',body);
 				res.status(200);
