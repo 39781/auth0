@@ -162,7 +162,7 @@ router.post('/validateUser',function(req, res){
 })
 
 var userCheck = function(requ){	
-	return new promise(function(resolve, reject){
+	return new Promise(function(resolve, reject){
 		console.log(JSON.stringify(requ));
 		var uid = requ.originalDetectIntentRequest.payload.user.userId;
 		if(typeof(loggedUsers[uid])!='undefined'){
