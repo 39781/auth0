@@ -10,9 +10,9 @@ module.exports = {
 		//console.log(JSON.stringify(Otps));
 		console.log(agent.request_.body.queryResult.parameters.otp);
 		if(loggedUsers[agent.request_.body.originalDetectIntentRequest.payload.user.userId].otp == agent.request_.body.queryResult.parameters.otp){					
-			auth0.generateToken(config.microServicesApis.common, config.appDet.tokenEndPoint)
+			return auth0.generateToken(config.microServicesApis.common, config.appDet.tokenEndPoint)
 			.then(function(result){
-				console.log(result);
+				console.log('result',result);
 				loggedUsers[agent.request_.body.originalDetectIntentRequest.payload.user.userId]['access_token'] = result.access_token;
 				agent.setFollowupEvent("gotoMenu");							
 			})
