@@ -11,7 +11,8 @@ const auth0			= require('./utilities/auth0.js');
 const actions		= require('./actions/actions.js');
 const jwtMiddleware = require('express-jwt')
 var jwksClient 		= require('jwks-rsa');
-const {dialogflow,Suggestions,SimpleResponse} = require('actions-on-google');
+//const {dialogflow,Suggestions,SimpleResponse} = require('actions-on-google');
+const {WebhookClient, Text, Card, Image, Suggestion, Payload} = require('dialogflow-fulfillment');
 var sessID;
 
 
