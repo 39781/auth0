@@ -11,15 +11,16 @@ express.use(bodyParser.json({type: 'application/json'}));
 // https://[YOUR DOMAIN]/example/location
 // don't forget to select "Enable webhook for all domains" for the DOMAIN field
 router.post('/botHandler', (req, res) => {
-	const app = new WebhookClient({request: req, response: res});
+	const agent = new WebhookClient({request: req, response: res});
+	
 	function intentHandler(agent) {
-    let conv = agent.conv();
-    conv.ask(new Permission({
-      context: 'To give results in your area',
-      permissions: 'DEVICE_PRECISE_LOCATION',
-    }))
-    agent.add(conv);
-  }
+		let conv = agent.conv();
+		conv.ask(new Permission({
+		  context: 'To give results in your area',
+		  permissions: 'DEVICE_PRECISE_LOCATION',
+		}))
+		agent.add(conv);
+	}	
 
   agent.handleRequest(intentHandler);
 	
