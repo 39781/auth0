@@ -2,7 +2,7 @@
 <html>
 <body>
 <script type='text/javascript'>
-	//var redirectURL = 'http://localhost:3000/redirectPage.html'
+	//var redirectURL = 'http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/redirectPage.html'
 var url= window.location.href.replace('#access_token','&access_token');
 //var url= redirectURL +'?access_token'+params;
 	console.log({'url':url});
@@ -11,8 +11,7 @@ var url= window.location.href.replace('#access_token','&access_token');
 		{if (this.readyState == 4){
 				if(this.status == 200) {
 					console.log(this.responseText);
-					if(this.responseText.indexOf('close')>=0){
-						alert('ari');
+					if(this.responseText.indexOf('close')>=0){						
 						parent.document.getElementById('closeWin').click();	
 					}else{
 						window.location.href=this.responseText;
@@ -23,8 +22,8 @@ var url= window.location.href.replace('#access_token','&access_token');
 				}
 		}
 		}
-		xmlhttp.open("POST", "http://localhost:3000/generateAccessToken");
-		//xmlhttp.open("POST", "http://localhost:3000/accessToken");
+		xmlhttp.open("POST", "http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/generateAccessToken");
+		//xmlhttp.open("POST", "http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/accessToken");
 		xmlhttp.setRequestHeader("Content-Type", "application/json");
 		xmlhttp.send(JSON.stringify({'url':url}));
 </script>

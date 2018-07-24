@@ -175,11 +175,12 @@ function validateLogin() {
 			//var respText = '<label for="uname"><b>OTP</b></label><span> has been sent to your mobile, please enter OTP in the required format [ ex: OTP - xxxxx ]</span><button type="button" onClick="window.close()">Continue</button>';
 			//document.getElementById("containerBody").innerHTML = respText;
 			//var respText = '<label for="psw"><b>Enter OTP</b></label><input type="password" placeholder="Password" id="otp" name="otp" required><button type="button" onClick="validateOtp('+accDet.phoneNumber+')">Login</button>';
+			var redUrl = accDet.redirectUri+'?sno=1&empId='+document.getElementById("uname").value+'&userId='+session;
 			webAuth = new auth0.WebAuth({
 				domain:       accDet.domainName,
 				clientID:     accDet.clientID,				
 				responseType: 'token',
-				redirectUri: accDet.redirectUri+'?sno=1&empId='+document.getElementById("uname").value+'&userId='+session,
+				redirectUri: redUrl,
 				responseType: 'token id_token'				
 			  }); 
 			  var respText = '<label for="psw"><b>Enter OTP</b></label><input type="password" placeholder="Password" id="otp" name="otp" required><button type="button" onClick="validateOtp('+accDet.phoneNumber+')">Login</button>';
@@ -209,13 +210,13 @@ function validateLogin() {
 			}
 		}
 	};
-	xmlhttp.open("POST", "http://localhost:3000/validateUser");
+	xmlhttp.open("POST", "http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/validateUser");
 	xmlhttp.setRequestHeader("Content-Type", "application/json");
 	xmlhttp.send(JSON.stringify({username:document.getElementById("uname").value,passwd:document.getElementById("pwd").value,sess:session}));	
 }
 
 function validateOtp(phone) {		
-	console.log(phone);
+	console.log(phone);	
 	webAuth.passwordlessLogin({
       connection: 'sms',
       phoneNumber: '+'+phone,

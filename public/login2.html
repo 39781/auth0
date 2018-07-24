@@ -23,7 +23,7 @@ body {
 </body>
 <script>
 console.log(window.location.href);
-url = 'http://localhost:3000/login1.html?userId='+window.location.href.split('=')[1];
+url = 'http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/login1.html?userId='+window.location.href.split('=')[1];
 document.getElementById('ifrm').src = url;
 window.onunload = function (e) {    		
     opener.somefunction(document.getElementById('errorTxt').value);

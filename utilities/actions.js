@@ -57,7 +57,7 @@ var listSelect = function(listSel, payload){
 		title : listSel.title,
 		items:[],
 	}
-	console.log('list',JSON.stringify(list));
+	
 	listSel.items.forEach(function(list){		
 		lists.items.push({
 			optionInfo:{
@@ -68,11 +68,12 @@ var listSelect = function(listSel, payload){
 			}
 		})
 	})
+	console.log('list',JSON.stringify(lists));
 	payload.google.systemIntent = {
 		"intent": "actions.intent.OPTION",
 		"data": {
 			"@type": "type.googleapis.com/google.actions.v2.OptionValueSpec",
-			"listSelect": list
+			"listSelect": lists
 		}
 	}	
 }
