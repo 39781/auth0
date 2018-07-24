@@ -2,7 +2,7 @@ const express = require('express')();
 const router = require('express').Router();
 const bodyParser = require('body-parser');
 const ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
-const ApiAiApp = require('actions-on-google').ApiAiApp;
+const ApiAiApp = require('actions-on-google').ApiAiAssistant;
 
 express.use(bodyParser.json({type: 'application/json'}));
 
