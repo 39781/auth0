@@ -2,7 +2,7 @@ const express = require('express')();
 const router = require('express').Router();
 const bodyParser = require('body-parser');
 const ActionsSdkApp = require('actions-on-google').ActionsSdkApp;
-const ApiAiApp = require('actions-on-google').ApiAiAssistant;
+//const ApiAiApp = require('actions-on-google').ApiAiApp;
 
 express.use(bodyParser.json({type: 'application/json'}));
 
@@ -10,7 +10,7 @@ express.use(bodyParser.json({type: 'application/json'}));
 // https://[YOUR DOMAIN]/example/location
 // don't forget to select "Enable webhook for all domains" for the DOMAIN field
 router.post('/botHandler', (req, res) => {
-	const app = new ApiAiApp({request: req, response: res});
+	const app = new ActionsSdkApp({request: req, response: res});
 	const intent = app.getIntent();
 	console.log(intent);
 	switch(intent){
