@@ -9,7 +9,7 @@ express.use(bodyParser.json({type: 'application/json'}));
 // In aip.ai console, under Fulfillment set webhook url to
 // https://[YOUR DOMAIN]/example/location
 // don't forget to select "Enable webhook for all domains" for the DOMAIN field
-router.post('/location', (req, res) => {
+router.post('/botHandler', (req, res) => {
 	const app = new ApiAiApp({request: req, response: res});
 	const intent = app.getIntent();
 	console.log(intent);
