@@ -278,6 +278,7 @@ router.post('/generateAccessToken',function(req, res){
 		res.send("Authentication failed due to some technical issue. Try again later");
 		res.end();
 	});*/
+	redirectUrl = 'close';
 	if(params.sno==2){
 		loggedUsers[params.userId]['access_token'] = params.access_token;		
 		console.log(loggedUsers[params.userId]);
