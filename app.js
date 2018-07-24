@@ -1,7 +1,7 @@
 const express = require('express')();
 const router = require('express').Router();
 const bodyParser = require('body-parser');
-const {DialogflowApp} = require('actions-on-google');
+const DialogflowApp = require('actions-on-google').DialogflowApp;
 
 
 express.use(bodyParser.json({type: 'application/json'}));
