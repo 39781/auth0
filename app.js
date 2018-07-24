@@ -41,7 +41,7 @@ router.post('/botHandler', (req, res) => {
 	}
 });
 
-express.use('/example', router);
+express.use(router);
 var port = process.env.PORT || 3000;
 express.listen(port, function () {
   console.log('Example app is running')
