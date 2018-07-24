@@ -1,7 +1,8 @@
 const express = require('express')();
 const router = require('express').Router();
 const bodyParser = require('body-parser');
-const DialogflowApp = require('actions-on-google').DialogflowApp;
+const {WebhookClient, Card, Suggestion} = require('dialogflow-fulfillment');
+const {Permission} = require('actions-on-google');
 
 
 express.use(bodyParser.json({type: 'application/json'}));
@@ -10,10 +11,19 @@ express.use(bodyParser.json({type: 'application/json'}));
 // https://[YOUR DOMAIN]/example/location
 // don't forget to select "Enable webhook for all domains" for the DOMAIN field
 router.post('/botHandler', (req, res) => {
-	const app = new DialogflowApp({request: req, response: res});
-	const intent = app.getIntent();
-	console.log(intent);
-	switch(intent){
+	const app = new WebhookClient({request: req, response: res});
+	function intentHandler(agent) {
+    let conv = agent.conv();
+    conv.ask(new Permission({
+      context: 'To give results in your area',
+      permissions: 'DEVICE_PRECISE_LOCATION',
+    }))
+    agent.add(conv);
+  }
+
+  agent.handleRequest(intentHandler);
+	
+	/*switch(intent){
 		case 'input.welcome':
 			// you are able to request for multiple permissions at once
 			const permissions = [
@@ -38,7 +48,7 @@ router.post('/botHandler', (req, res) => {
 				app.ask('Alright. Can you tell me you address please?');
 			}
 		break;
-	}
+	}*/
 });
 
 express.use(router);
