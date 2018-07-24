@@ -3,46 +3,13 @@ var auth0 = require('./../utilities/auth0.js');
 var config = require('./../config.js');
 
 module.exports = {
-	welcome:function(agent){
+	gotoMenu:function(){
 		return {
 			"fulfillmentText": '',
 			"followupEventInput":{
 				"name": "gotoMenu", 
 				"parameters" : {},					
 			}
-		}
-	},
-	verifyOtp:function(requ){
-		//console.log(req.originalDetectIntentRequest.payload.conversation.conversationId);
-		//console.log(JSON.stringify(Otps));
-		var payload = JSON.parse(JSON.stringify(config.responseObj.payload));
-		console.log(requ.body.queryResult.parameters.otp);
-		if(loggedUsers[requ.originalDetectIntentRequest.payload.user.userId].otp == requ.queryResult.parameters.otp){					
-			return auth0.generateToken(config.microServicesApis.common, config.appDet.tokenEndPoint)
-			.then(function(result){
-				console.log('result',result);
-				console.log('uid',requ.originalDetectIntentRequest.payload.user.userId);
-				loggedUsers[requ.originalDetectIntentRequest.payload.user.userId]['access_token'] = result.access_token;
-				agent.setFollowupEvent("gotoMenu");							
-				console.log(loggedUsers[requ.originalDetectIntentRequest.payload.user.userId]);
-			})
-			.catch(function(err){
-				payload.google.richResponse.items.push({
-					simpleResponse:{
-						textToSpeach:`Authentication failed due to some technical issue. Try again later`,
-						displayText:`Authentication failed due to some technical issue. Try again later`
-					}
-				});
-				return payload;
-			});			
-		}else{
-			payload.google.richResponse.items.push({
-				simpleResponse:{
-					textToSpeach:`you entered invalid OTP/format, please enter valid OTP in correct format(Ex: OTP xxxxxx) `,
-					displayText:`you entered invalid OTP/format, please enter valid OTP in correct format(Ex: OTP xxxxxx)`
-				}
-			});
-			return payload;			
 		}
 	},
 	sendResponses:function(messages){
