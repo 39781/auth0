@@ -257,7 +257,7 @@ var userCheck = function(requ){
 
 
 router.get('/redirectUri',function(req,res){	
-	res.redirect('https://logintests.herokuapp.com/redirectPage.html?sno='+req.query.sno+'&empId='+req.query.empId+'&userId='+req.query.userId);	
+	res.redirect('http://localhost:3000/redirectPage.html?sno='+req.query.sno+'&empId='+req.query.empId+'&userId='+req.query.userId);	
 });
 
 
@@ -289,9 +289,9 @@ router.post('/generateAccessToken',function(req, res){
 		res.json(redirectUrl).end();
 	}else{
 		loggedUsers[params.userId] = params	
-		redirectUrl = config.appDet.authorize+'?response_type='+config.appDet.responseType+'&client_id='+config.adAuthObj.client_id+'&connection='+config.adAuthObj.connection+'&redirect_uri='+encodeURIComponent("https://logintests.herokuapp.com/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&state='+params.access_token+'&prompt=none';
+		//redirectUrl = config.appDet.authorize+'?response_type='+config.appDet.responseType+'&client_id='+config.adAuthObj.client_id+'&connection='+config.adAuthObj.connection+'&redirect_uri='+encodeURIComponent("http://localhost:3000/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&state='+params.access_token+'&prompt=none';
 		
-		//redirectUrl = config.appDet.authorize+'?scope='+config.appDet.scope+'&audience='+config.appDet.audience+'&response_type='+config.appDet.responseType+'&client_id='+config.appDet.clientID+'&redirect_uri='+encodeURIComponent("https://logintests.herokuapp.com/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&nonce='+params.access_token+'&prompt=none';
+		redirectUrl = config.appDet.authorize+'?scope='+config.appDet.scope+'&audience='+config.appDet.audience+'&response_type='+config.appDet.responseType+'&client_id='+config.appDet.clientID+'&redirect_uri='+encodeURIComponent("http://localhost:3000/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&nonce='+params.access_token+'&prompt=none';
 		
 		console.log(redirectUrl);		
 		res.header('content-type','text/plain');
@@ -306,7 +306,7 @@ router.post('/generateAccessToken',function(req, res){
 })
 //https://github.com/actions-on-google/dialogflow-facts-about-google-nodejs/blob/master/functions/index.js
 var testAccessTokenValidation = function(token, peopleSoftAPI){
-	request.post('https://logintests.herokuapp.com/auth0/psMicroService', {
+	request.post('http://localhost:3000/auth0/psMicroService', {
 		'auth': {
 		  'bearer': token
 		 },

@@ -209,7 +209,7 @@ function validateLogin() {
 			}
 		}
 	};
-	xmlhttp.open("POST", "https://logintests.herokuapp.com/validateUser");
+	xmlhttp.open("POST", "http://localhost:3000/validateUser");
 	xmlhttp.setRequestHeader("Content-Type", "application/json");
 	xmlhttp.send(JSON.stringify({username:document.getElementById("uname").value,passwd:document.getElementById("pwd").value,sess:session}));	
 }
