@@ -288,10 +288,10 @@ router.post('/generateAccessToken',function(req, res){
 		res.status(200);
 		res.json(redirectUrl).end();
 	}else{
-		loggedUsers[params.userId] = params;	
+		loggedUsers[params.userId] = params	
+		redirectUrl = config.appDet.authorize+'?response_type='+config.appDet.responseType+'&client_id='+config.adAuthObj.client_id+'&connection='+config.adAuthObj.connection+'&redirect_uri='+encodeURIComponent("https://logintests.herokuapp.com/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&state='+params.access_token+'&prompt=none';
 		
-		
-		redirectUrl = config.appDet.authorize+'?scope='+config.appDet.scope+'&audience='+config.appDet.audience+'&response_type='+config.appDet.responseType+'&client_id='+config.appDet.clientID+'&redirect_uri='+encodeURIComponent("https://logintests.herokuapp.com/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&state='+params.access_token+'&prompt=none';
+		//redirectUrl = config.appDet.authorize+'?scope='+config.appDet.scope+'&audience='+config.appDet.audience+'&response_type='+config.appDet.responseType+'&client_id='+config.appDet.clientID+'&redirect_uri='+encodeURIComponent("https://logintests.herokuapp.com/redirectUri?sno=2&empId="+params.empId+"&userId="+params.userId)+'&nonce='+params.access_token+'&prompt=none';
 		
 		console.log(redirectUrl);		
 		res.header('content-type','text/plain');
