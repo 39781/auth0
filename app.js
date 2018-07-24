@@ -12,7 +12,7 @@ express.use(bodyParser.json({type: 'application/json'}));
 router.post('/location', (req, res) => {
 	const app = new ApiAiApp({request: req, response: res});
 	const intent = app.getIntent();
-	
+	console.log(intent);
 	switch(intent){
 		case 'input.welcome':
 			// you are able to request for multiple permissions at once
