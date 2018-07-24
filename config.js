@@ -1,4 +1,5 @@
 module.exports = {
+	auds:["https://logintests.herokuapp.com/auth0/psMicroService/"],
 	microServicesApis:{
 		psMicroService:{
 			  "client_id":"6Wj4uUq00IpauFR02kyY9fehZIzzlKwL",

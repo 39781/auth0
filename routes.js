@@ -17,7 +17,8 @@ var sessID;
 
 
 
-router.use('/auth0/psMicroService',function(req, res, next){
+router.use('/auth0',function(req, res, next){
+	console.log(req.session);
 	var client = jwksClient({
 		jwksUri: config.appDet.jwksUri
 	});
@@ -30,7 +31,7 @@ router.use('/auth0/psMicroService',function(req, res, next){
 	if (req.headers.authorization){
 		var auth = req.headers.authorization.split(' ');
 		if(auth[0] === 'Bearer'){
-			return jwt.verify(auth[1], getKey, {algorithms:config.appDet.alg,issuer:config.appDet.issuer,audience:req.session.audience}, function(err, decoded) {
+			return jwt.verify(auth[1], getKey, {algorithms:config.appDet.alg,issuer:config.appDet.issuer,audience:config.auds[req.body.type]}, function(err, decoded) {
 				if(err){
 					const err = new Error('Not Found');
 					err.status = 404;
@@ -308,7 +309,7 @@ var testAccessTokenValidation = function(token, peopleSoftAPI){
 		  'bearer': token
 		 },
 		'json': true,
-		'body':{api:peopleSoftAPI}
+		'body':{api:peopleSoftAPI,type:0}
 		}, (err, httpResponse, body) => {
 		  console.log(err,body);
 		 console.log(httpResponse.statusCode + ': ' + httpResponse.statusMessage);
