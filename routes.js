@@ -86,7 +86,9 @@ router.post('/auth0/snowMicroService', function(req,res){
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
 	//console.log(JSON.stringify(req.body));
+	console.log('bothandler');
 	res.json({
+		payload:{
   "google": {
     "expectUserResponse": true,
     "richResponse": {
@@ -115,7 +117,7 @@ router.post('/botHandler',function(req, res){
           "title": "Main Menu",
           "items": [
             {
-              "optioninfo": {
+              "info": {
                 "key": "HR",
                 "synonyms": [
                   "HR Services"
@@ -126,7 +128,7 @@ router.post('/botHandler',function(req, res){
               "image": {}
             },
             {
-              "optioninfo": {
+              "info": {
                 "key": "IT",
                 "synonyms": [
                   "IT Help Desk"
@@ -137,7 +139,7 @@ router.post('/botHandler',function(req, res){
               "image": {}
             },
             {
-              "optioninfo": {
+              "info": {
                 "key": "Meeting",
                 "synonyms": [
                   "Meeting scheduler"
@@ -152,6 +154,7 @@ router.post('/botHandler',function(req, res){
       }
     }
   }
+		}
 });	
 	/*userCheck(req.body)
 	.then(function(resp){
