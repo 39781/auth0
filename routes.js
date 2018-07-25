@@ -86,8 +86,74 @@ router.post('/auth0/snowMicroService', function(req,res){
 router.post('/botHandler',function(req, res){		
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
 	//console.log(JSON.stringify(req.body));
-		
-	userCheck(req.body)
+	res.json({
+  "google": {
+    "expectUserResponse": true,
+    "richResponse": {
+      "items": [
+        {
+          "simpleResponse": {
+            "textToSpeech": "Kindly select an option below to continue",
+            "displayText": "Kindly select an option below to continue"
+          }
+        }
+      ],
+      "suggestions": [
+        {
+          "title": "test1"
+        },
+        {
+          "title": "test2"
+        }
+      ]
+    },
+    "systemIntent": {
+      "intent": "actions.intent.OPTION",
+      "data": {
+        "@type": "type.googleapis.com/google.actions.v2.OptionValueSpec",
+        "listSelect": {
+          "title": "Main Menu",
+          "items": [
+            {
+              "info": {
+                "key": "HR",
+                "synonyms": [
+                  "HR Services"
+                ]
+              },
+              "title": "HR Services",
+              "description": "for Leave management, Employee Search",
+              "image": {}
+            },
+            {
+              "info": {
+                "key": "IT",
+                "synonyms": [
+                  "IT Help Desk"
+                ]
+              },
+              "title": "IT Help Desk",
+              "description": "For :  Help desk",
+              "image": {}
+            },
+            {
+              "info": {
+                "key": "Meeting",
+                "synonyms": [
+                  "Meeting scheduler"
+                ]
+              },
+              "title": "Meeting scheduler",
+              "description": "For : create meeting, cancel and reschedule meeting",
+              "image": {}
+            }
+          ]
+        }
+      }
+    }
+  }
+});	
+	/*userCheck(req.body)
 	.then(function(resp){
 		console.log(resp);
 		res.status(200);
@@ -96,7 +162,7 @@ router.post('/botHandler',function(req, res){
 	.catch(function(err){
 		res.status(400);
 		res.json(err).end();
-	})
+	})*/
 		
 });	
 
@@ -139,8 +205,8 @@ var userCheck = function(requ){
 	return new Promise(function(resolve, reject){
 		console.log(JSON.stringify(requ));
 		var uid = requ.originalDetectIntentRequest.payload.user.userId;
-		var userLogged = require('./userLog/'+uid+'.json');
-		if(typeof(userLogged)!='undefined'){
+		try{
+			var userLogged = require('./userLog/'+uid+'.json');
 			var options = {
 				idToken:loggedUsers[uid].access_token,
 				issuer:config.appDet.issuer,
@@ -171,16 +237,7 @@ var userCheck = function(requ){
 					}
 				});
 			})
-				
-			/*if(requ.queryResult.action == 'input.welcome'){
-				agent.setFollowupEvent("gotoMenu");
-			}else{
-				agent.add(agent.consoleMessages); 
-			}*/							
-			//return;
-			
-			
-		}else{
+		}catch(err){
 			var actionName = requ.queryResult.action;	
 			console.log(actionName);	
 			respText = "Hi I'm Hema !. I can help you to manage your leave, search an employee, account recovery and create or track your service tickets. Kindly select an option below to continue.";
@@ -196,8 +253,8 @@ var userCheck = function(requ){
 						session:requ.originalDetectIntentRequest.payload.user.userId
 					}
 				}
-			});			
-		}
+			});
+		}		
 	})
 }
 
