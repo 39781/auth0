@@ -115,7 +115,7 @@ router.post('/botHandler',function(req, res){
           "title": "Main Menu",
           "items": [
             {
-              "info": {
+              "optioninfo": {
                 "key": "HR",
                 "synonyms": [
                   "HR Services"
@@ -126,7 +126,7 @@ router.post('/botHandler',function(req, res){
               "image": {}
             },
             {
-              "info": {
+              "optioninfo": {
                 "key": "IT",
                 "synonyms": [
                   "IT Help Desk"
@@ -137,7 +137,7 @@ router.post('/botHandler',function(req, res){
               "image": {}
             },
             {
-              "info": {
+              "optioninfo": {
                 "key": "Meeting",
                 "synonyms": [
                   "Meeting scheduler"
