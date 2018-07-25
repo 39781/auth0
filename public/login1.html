@@ -210,7 +210,7 @@ function validateLogin() {
 			}
 		}
 	};
-	xmlhttp.open("POST", "http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/validateUser");
+	xmlhttp.open("POST", "https://logintests.herokuapp.com/validateUser");
 	xmlhttp.setRequestHeader("Content-Type", "application/json");
 	xmlhttp.send(JSON.stringify({username:document.getElementById("uname").value,passwd:document.getElementById("pwd").value,sess:session}));	
 }

@@ -87,76 +87,8 @@ router.post('/botHandler',function(req, res){
 	var responseObj = JSON.parse(JSON.stringify(config.responseObj));
 	//console.log(JSON.stringify(req.body));
 	console.log('bothandler');
-	res.json({
-		payload:{
-  "google": {
-    "expectUserResponse": true,
-    "richResponse": {
-      "items": [
-        {
-          "simpleResponse": {
-            "textToSpeech": "Kindly select an option below to continue",
-            "displayText": "Kindly select an option below to continue"
-          }
-        }
-      ],
-      "suggestions": [
-        {
-          "title": "test1"
-        },
-        {
-          "title": "test2"
-        }
-      ]
-    },
-    "systemIntent": {
-      "intent": "actions.intent.OPTION",
-      "data": {
-        "@type": "type.googleapis.com/google.actions.v2.OptionValueSpec",
-        "listSelect": {
-          "title": "Main Menu",
-          "items": [
-            {
-              "optionInfo": {
-                "key": "HR",
-                "synonyms": [
-                  "HR Services"
-                ]
-              },
-              "title": "HR Services",
-              "description": "for Leave management, Employee Search",
-              "image": {}
-            },
-            {
-              "optionInfo": {
-                "key": "IT",
-                "synonyms": [
-                  "IT Help Desk"
-                ]
-              },
-              "title": "IT Help Desk",
-              "description": "For :  Help desk",
-              "image": {}
-            },
-            {
-              "optionInfo": {
-                "key": "Meeting",
-                "synonyms": [
-                  "Meeting scheduler"
-                ]
-              },
-              "title": "Meeting scheduler",
-              "description": "For : create meeting, cancel and reschedule meeting",
-              "image": {}
-            }
-          ]
-        }
-      }
-    }
-  }
-		}
-});	
-	/*userCheck(req.body)
+	
+	userCheck(req.body)
 	.then(function(resp){
 		console.log(resp);
 		res.status(200);
@@ -165,7 +97,7 @@ router.post('/botHandler',function(req, res){
 	.catch(function(err){
 		res.status(400);
 		res.json(err).end();
-	})*/
+	})
 		
 });	
 
@@ -266,7 +198,7 @@ var userCheck = function(requ){
 
 
 router.get('/redirectUri',function(req,res){	
-	res.redirect('http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/redirectPage.html?sno='+req.query.sno+'&empId='+req.query.empId+'&userId='+req.query.userId);	
+	res.redirect('https://logintests.herokuapp.com/redirectPage.html?sno='+req.query.sno+'&empId='+req.query.empId+'&userId='+req.query.userId);	
 });
 
 
@@ -299,7 +231,7 @@ router.post('/generateAccessToken',function(req, res){
 })
 //https://github.com/actions-on-google/dialogflow-facts-about-google-nodejs/blob/master/functions/index.js
 var testAccessTokenValidation = function(token, peopleSoftAPI){
-	request.post('http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/auth0/psMicroService', {
+	request.post('https://logintests.herokuapp.com/auth0/psMicroService', {
 		'auth': {
 		  'bearer': token
 		 },

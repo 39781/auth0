@@ -1,10 +1,10 @@
 module.exports = {
-	auds:["http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/auth0/psMicroService/"],
+	auds:["https://logintests.herokuapp.com/auth0/psMicroService/"],
 	microServicesApis:{
 		AD:{
 			  "client_id":"6Wj4uUq00IpauFR02kyY9fehZIzzlKwL",
 			  "client_secret":"YL4Zezuum3Bo_E-5okTDAkRS0mAqGluDwqYIJNkN2IgdIIXcuuU2iu727RugFgc4",
-			  "audience":"http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/auth0/psMicroService/",
+			  "audience":"https://logintests.herokuapp.com/auth0/psMicroService/",
 			  "grant_type":"client_credentials"
 		},
 		common:{
@@ -52,7 +52,7 @@ module.exports = {
 		"scope":"profile",
 		"clientID":"hCg4mx_Cakni2wtASJnKpGcRntBH3ZjN",
 		"clientSecret":"BHKd9RjFpywi67W_5LeX9hslKGlpnBh3zOhXE-CowRgIFQXB-ifgIQtnRlEBazlM",
-		"redirectUri":'http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/redirectUri',
+		"redirectUri":'https://logintests.herokuapp.com/redirectUri',
 		'issuer':'https://exeter.auth0.com/',
 		'jwksUri':'https://exeter.auth0.com/.well-known/jwks.json',
 		'alg':['RS256']
@@ -73,7 +73,7 @@ module.exports = {
 		"37086":{ph:"+917200050085",name:"B+Hari+Prasad%2c"},
 		"deb":{ph:"+917200050085",name:"B+Hari+Prasad%2c"}
 	},
-	apis:["http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/test"],
+	apis:["https://logintests.herokuapp.com/test"],
 	"smsApi":"http://smsapi.24x7sms.com/api_2.0/SendSMS.aspx?APIKEY=ZY2nHm2RiIC&MobileNo=phonenumber&SenderID=TESTIN&Message=Dear+name+the+OTP+to+reset+your+password+is+Otpnumber%2c+valid+only+for+the+next+30++minutes.&ServiceName=TEMPLATE_BASED",
 	responseObj: {
 	  "payload": {

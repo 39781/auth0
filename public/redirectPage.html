@@ -2,7 +2,7 @@
 <html>
 <body>
 <script type='text/javascript'>
-	//var redirectURL = 'http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/redirectPage.html'
+	//var redirectURL = 'https://logintests.herokuapp.com/redirectPage.html'
 var url= window.location.href.replace('#access_token','&access_token');
 //var url= redirectURL +'?access_token'+params;
 	console.log({'url':url});
@@ -22,8 +22,8 @@ var url= window.location.href.replace('#access_token','&access_token');
 				}
 		}
 		}
-		xmlhttp.open("POST", "http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/generateAccessToken");
-		//xmlhttp.open("POST", "http://ec2-54-172-70-40.compute-1.amazonaws.com:3000/accessToken");
+		xmlhttp.open("POST", "https://logintests.herokuapp.com/generateAccessToken");
+		//xmlhttp.open("POST", "https://logintests.herokuapp.com/accessToken");
 		xmlhttp.setRequestHeader("Content-Type", "application/json");
 		xmlhttp.send(JSON.stringify({'url':url}));
 </script>

@@ -13,26 +13,26 @@ module.exports = {
 		}
 	},
 	sendResponses:function(messages){
-		var payload = JSON.parse(JSON.stringify(config.responseObj.payload));
+		var resObj = JSON.parse(JSON.stringify(config.responseObj));
 		messages.forEach(function(message){
 			if(message.simpleResponses){
-				simpleResponses(message.simpleResponses.simpleResponses,payload);
+				simpleResponses(message.simpleResponses.simpleResponses,resObj.payload);
 			}
 			if(message.suggestions){
-				suggestions(message.suggestions.suggestions, payload);
+				suggestions(message.suggestions.suggestions, resObj.payload);
 			}
 			if(message.listSelect){
-				listSelect(message.listSelect, payload);
+				listSelect(message.listSelect, resObj.payload);
 			}
 			if(message.basicCard){
-				basicCard(message.basicCard, payload);
+				basicCard(message.basicCard, resObj.payload);
 			}
 			if(message.Carousel){
 			}
 			if(message.BrowseCarousel){
 			}
 		});
-		return payload;		
+		return resObj;		
 	}	
 }
 
